@@ -170,10 +170,10 @@
       <h1>Market Move</h1>
       <p class="sub">Membaca arah crypto 1 jam ke depan: bias momentum 1 jam, pola candlestick klasik dari candle 1 jam, rentang forecast dari volatilitas 1 jam terakhir,
         dan level support / resistance jangka pendek — untuk BTC, ENA, ONDO, ETH, SHIB, PENGU, BNB, SUI, XPL, PUMP, PYTH, ZEC, ASTER, JUP, HYPE, WCT, SOMI, dan XAU (diwakili token emas PAXG). Di bawah panel koin ada
-        <a href="#pemantau" style="color:var(--teal)">Pemantau Crypto Live</a>: sinyal pool baru BSC dari monitor sinyal terakhir. Panel koin di halaman ini <b>live</b> — datanya ditarik langsung dari Binance setiap halaman dibuka dan diperbarui otomatis tiap 60 detik; bagian Pemantau di bawah tetap cuplikan monitor terakhir.</p>
+        <a href="#pemantau" style="color:var(--teal)">Pemantau Crypto Live</a>: sinyal pool baru BSC dari monitor sinyal terakhir. Panel koin di halaman ini <b>live</b> — datanya ditarik langsung dari Binance setiap halaman dibuka dan diperbarui otomatis tiap 60 detik. Bila Binance tidak terjangkau dari jaringanmu, tiap koin otomatis dicoba dari sumber cadangan berurutan — <b>Binance US → OKX → Gate.io</b> — supaya grafik tetap muncul, dan bar status di bawah menulis sumber yang benar-benar dipakai; bagian Pemantau di bawah tetap cuplikan monitor terakhir.</p>
 
-      <div class="snapshot"><span><span class="dot pulse" id="statusDot"></span><span id="statusText"><b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin.</span></span>
-        <span>Sumber: Binance Spot (data-api.binance.vision) · tanpa API key</span>
+      <div class="snapshot"><span><span class="dot pulse" id="statusDot"></span><span id="statusText"><b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin (cadangan otomatis per koin: Binance US → OKX → Gate.io).</span></span>
+        <span>Sumber: Binance Spot · cadangan Binance US → OKX → Gate.io · tanpa API key</span>
         <span id="refreshInfo">Auto-refresh tiap 60 detik</span>
         <button type="button" class="retry-btn" id="refreshBtn">Perbarui sekarang</button></div>
 
@@ -242,11 +242,11 @@
       <section class="card howto">
         <h2>Cara membaca halaman ini</h2>
         <ul>
-          <li><b>Data live panel koin</b> — candle 1-menit terbaru ditarik langsung dari Binance Spot (data-api.binance.vision) setiap halaman dibuka, lalu diperbarui otomatis tiap 60 detik; jam pembaruan terakhir tampil di bar status di atas. Bila Binance tidak terjangkau, panel yang gagal ditandai jelas — angka lama tidak pernah ditampilkan seolah-olah baru.</li>
-          <li><b>Bias Momentum</b> — skor arah dari RSI(14), posisi harga terhadap EMA20/EMA50 pada candle 1-menit, warna candle, dan perubahan harga 1 jam di data spot Binance. Ini <b>bukan</b> rasio posisi Long/Short futures (endpoint futures Binance tidak bisa diakses dari lokasi server saat pengambilan data), jadi jangan dibaca sebagai posisi trader futures.</li>
+          <li><b>Data live panel koin</b> — candle 1-menit terbaru ditarik langsung dari Binance Spot (data-api.binance.vision) setiap halaman dibuka, lalu diperbarui otomatis tiap 60 detik; jam pembaruan terakhir tampil di bar status di atas. Bila Binance tidak terjangkau dari jaringanmu, tiap koin otomatis dicoba berurutan dari <b>Binance US, lalu OKX, lalu Gate.io</b> — candle dari sumber cadangan dinormalisasi ke format yang sama persis, jadi semua hitungan di bawah setara. Bar status dan ringkasan koin menulis sumber yang benar-benar dipakai. Bila semua sumber gagal, panel yang gagal ditandai jelas — angka lama tidak pernah ditampilkan seolah-olah baru.</li>
+          <li><b>Bias Momentum</b> — skor arah dari RSI(14), posisi harga terhadap EMA20/EMA50 pada candle 1-menit, warna candle, dan perubahan harga 1 jam di data spot dari sumber yang memuat panel itu (Binance / Binance US / OKX / Gate.io). Ini <b>bukan</b> rasio posisi Long/Short futures (endpoint futures Binance tidak bisa diakses dari lokasi server saat pengambilan data), jadi jangan dibaca sebagai posisi trader futures.</li>
           <li><b>Forecast Range</b> — harga terakhir ± volatilitas terealisasi 1 jam terakhir (simpangan baku return 1-menit × √60). Ini rentang statistik: harga <i>bisa</i> keluar dari rentang ini, terutama saat ada berita besar.</li>
-          <li><b>Pola Candlestick</b> — pola klasik (Hammer, Inverted Hammer, Shooting Star, Hanging Man, Doji termasuk Dragonfly &amp; Gravestone, Engulfing, Piercing Line, Dark Cloud Cover, Morning/Evening Star, Three White Soldiers, Three Black Crows, dan Harami) dideteksi langsung di browser dari candle 1 jam Binance dengan definisi standar: perbandingan badan candle, ekor atas/bawah, dan posisi terhadap tren (EMA20 candle 1 jam). Yang tampil adalah pola paling baru dari 15 candle 1 jam terakhir, lengkap dengan label Bullish/Bearish/Netral dan umur candle-nya; candle berpola ditandai berlian berwarna bertuliskan nama pola pada grafik Forecast Range bila jamnya masuk jendela grafik. Candle 1 jam yang masih berjalan belum ditutup, jadi polanya masih bisa berubah sebelum jam berganti. Bila tidak ada pola yang memenuhi definisi, panel menulis <b>"Tidak ada pola"</b> apa adanya. Pola adalah konteks bacaan, bukan jaminan arah.</li>
-          <li><b>Support / Resistance kuat</b> — low / high 6 jam terakhir (candle 1-menit Binance), disesuaikan untuk horizon 1 jam. Level terdekat memakai high/low 1 jam terakhir.</li>
+          <li><b>Pola Candlestick</b> — pola klasik (Hammer, Inverted Hammer, Shooting Star, Hanging Man, Doji termasuk Dragonfly &amp; Gravestone, Engulfing, Piercing Line, Dark Cloud Cover, Morning/Evening Star, Three White Soldiers, Three Black Crows, dan Harami) dideteksi langsung di browser dari candle 1 jam sumber yang sama dengan data 1-menit panel itu (Binance / Binance US / OKX / Gate.io) dengan definisi standar: perbandingan badan candle, ekor atas/bawah, dan posisi terhadap tren (EMA20 candle 1 jam). Yang tampil adalah pola paling baru dari 15 candle 1 jam terakhir, lengkap dengan label Bullish/Bearish/Netral dan umur candle-nya; candle berpola ditandai berlian berwarna bertuliskan nama pola pada grafik Forecast Range bila jamnya masuk jendela grafik. Candle 1 jam yang masih berjalan belum ditutup, jadi polanya masih bisa berubah sebelum jam berganti. Bila tidak ada pola yang memenuhi definisi, panel menulis <b>"Tidak ada pola"</b> apa adanya. Pola adalah konteks bacaan, bukan jaminan arah.</li>
+          <li><b>Support / Resistance kuat</b> — low / high 6 jam terakhir (candle 1-menit dari sumber panel itu), disesuaikan untuk horizon 1 jam. Level terdekat memakai high/low 1 jam terakhir.</li>
           <li><b>Fan Area</b> di grafik mulai dari titik awal forecast (candle 30 menit lalu, ditandai lingkaran putih dan garis vertikal putus-putus) lalu melebar menuju Possible High / Possible Low di ujung horizon 1 jam dari titik awal itu. Candle yang terjadi setelah titik awal digambar <b>di dalam</b> area fan — jadi kelihatan apakah harga aktual masih bergerak di dalam rentang forecast atau sudah keluar. Garis putih putus-putus horizontal adalah Last Price yang dipanjangkan ke tepi kanan; garis teal putus-putus adalah Support Level (low 1 jam terakhir).</li>
           <li><b>Pemantau Crypto Live</b> — hasil monitor sinyal yang berjalan tiap 15 menit di luar halaman ini (GeckoTerminal, PancakeSwap, Trust Wallet). Sinyal <b>new-pool momentum</b> artinya pool BSC yang baru dibuat dan sedang ramai dibeli — <b>bukan</b> bocoran atau pengumuman listing. FDV = nilai pasar terdilusi penuh versi GeckoTerminal; Reserve = likuiditas yang terkunci di pool saat dicek; Buys 1 jam = jumlah transaksi beli dalam 1 jam terakhir. Pada jam 23:00–07:00 WIB monitor hanya mencatat sinyal tanpa mengirim alert.</li>
         </ul>
@@ -261,7 +261,10 @@
     <script>
       // ---- Market Move LIVE: data ditarik langsung dari Binance Spot public API ----
       // (data-api.binance.vision, tanpa API key) setiap halaman dibuka, lalu diperbarui
-      // otomatis tiap 60 detik. Semua metrik dihitung di browser dari candle 1-menit
+      // otomatis tiap 60 detik. Bila Binance tidak terjangkau dari jaringan pembaca,
+      // tiap koin dicoba berurutan dari sumber cadangan — Binance US, lalu OKX, lalu
+      // Gate.io — dan candle dari sumber mana pun dinormalisasi dulu ke format
+      // candle Binance yang sama persis sebelum dihitung. Semua metrik dihitung di browser dari candle 1-menit
       // dengan rumus yang sama seperti versi snapshot: RSI(14) Wilder, EMA20/EMA50,
       // ATR(14) Wilder, volatilitas terealisasi 1 jam = simpangan baku sampel return
       // 1-menit x sqrt(60), forecast = harga terakhir +/- volatilitas itu, support /
@@ -482,7 +485,7 @@
           '<p class="bias-note" style="margin:8px 0 0">Candle berpola ini ditandai berlian '+colTxt+' bertuliskan namanya pada grafik Forecast Range di bawah. Pola adalah konteks bacaan, bukan sinyal pasti — padukan dengan Bias Momentum dan level support/resistance sebelum mengambil keputusan.</p></section>';
       }
 
-      function computeData(sym, raw){
+      function computeData(sym, raw, sourceLabel){
         var m=META[sym];
         var all=raw.map(function(r){ return [r[0], parseFloat(r[1]), parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4]), parseFloat(r[7])]; });
         var closes=all.map(function(c){ return c[4]; });
@@ -515,7 +518,7 @@
         var longPct=Math.max(1, Math.min(99, Math.round(rawScore)));
         var isLong=longPct>=50;
         var d={
-          name:m.name, pair:m.pair, dec:m.dec, note:m.note||null,
+          name:m.name, pair:m.pair, dec:m.dec, note:m.note||null, source:sourceLabel||"Binance",
           last:last, start:start, chg1h:chg1h, volQuote:fmtVolID(volQuote),
           longPct:longPct, biasLabel:isLong?"Condong Long":"Condong Short", biasClass:isLong?"long":"short",
           fHigh:fHigh, fLow:fLow, vol1h:vol1h,
@@ -553,15 +556,15 @@
       function buildDrivers(m, d){
         var dLow=(d.last-d.supNear)/d.supNear*100;
         var dHigh=(d.resNear-d.last)/d.last*100;
-        var srcA="Dari candle 1-menit Binance (data live).";
-        var srcB="Dihitung dari candle 1-menit Binance (data live).";
+        var srcA="Dari candle 1-menit "+(d.source||"Binance")+" (data live).";
+        var srcB="Dihitung dari candle 1-menit "+(d.source||"Binance")+" (data live).";
         return [
           {tag:"Top 1", text:"Pergerakan 1 jam: harga terakhir "+fmt(d.last,d.dec)+" berjarak "+pct(dLow)+" dari low 1 jam "
             +fmt(d.supNear,d.dec)+" dan "+pct(dHigh)+" dari high 1 jam "+fmt(d.resNear,d.dec)
             +" — level terdekat yang ditembus lebih dulu cenderung menentukan arah jam berikutnya.", src:srcA},
           {tag:"Faktor 2", text:"RSI(1m) "+d.rsi.toFixed(1)+" dan "+Math.round(d.greenPct)+"% candle 1 menit terakhir berwarna hijau. Volatilitas terealisasi 1 jam "
             +d.vol1h.toFixed(2)+"% — itulah yang menentukan lebar rentang forecast di panel ini.", src:srcB},
-          {tag:"Faktor 3", text:"Volume spot 1 jam ±"+d.volQuote+" di pair "+m.pairD+" Binance. Volume yang tipis membuat penembusan level lebih rawan jadi penembusan semu, jadi tetap tunggu konfirmasi candle berikutnya.", src:srcA}
+          {tag:"Faktor 3", text:"Volume spot 1 jam ±"+d.volQuote+" di pair "+m.pairD+" "+(d.source||"Binance")+". Volume yang tipis membuat penembusan level lebih rawan jadi penembusan semu, jadi tetap tunggu konfirmasi candle berikutnya.", src:srcA}
         ];
       }
 
@@ -747,11 +750,12 @@ function panelHTML(sym){
             '<span class="chg '+(d.chg1h>=0?"up":"down")+'">'+pct(d.chg1h)+' · 1j</span>'+
             '<span class="chip '+d.biasClass+'">'+d.biasLabel+'</span>'+
             '<span class="pair">'+d.pair+'</span>'+
+            (d.source && d.source!=="Binance"?'<span class="pair">via '+d.source+'</span>':'')+
             (STALE[sym]?'<span class="chip flat">Data lama — pembaruan gagal</span>':'');
         } else if(FAILED[sym]){
-          summaryEl.innerHTML='<span class="pair">Data '+sym+' gagal dimuat dari Binance — panel di bawah memberi tombol coba lagi.</span>';
+          summaryEl.innerHTML='<span class="pair">Data '+sym+' gagal dimuat dari semua sumber (Binance, Binance US, OKX, Gate.io) — panel di bawah memberi tombol coba lagi.</span>';
         } else {
-          summaryEl.innerHTML='<span class="pair">Memuat data '+sym+' langsung dari Binance…</span>';
+          summaryEl.innerHTML='<span class="pair">Memuat data '+sym+'… mencoba Binance, lalu cadangan Binance US / OKX / Gate.io bila perlu.</span>';
         }
         ORDER.forEach(function(s){
           var el=document.getElementById("panel-"+s);
@@ -772,10 +776,10 @@ function panelHTML(sym){
           el.innerHTML=staleHtml+panelHTML(sym);
         } else if(FAILED[sym]){
           el.innerHTML='<section class="card panel-msg"><h2>'+sym+' — '+META[sym].name+'</h2>'
-            +'<p>Gagal memuat data '+META[sym].pair+' dari Binance Spot. Periksa koneksi internet kamu, lalu coba lagi — tidak ada angka lama yang ditampilkan untuk koin ini.</p>'
+            +'<p>Gagal memuat data '+META[sym].pair+' dari semua sumber — Binance Spot, Binance US, OKX, dan Gate.io tidak ada yang terjangkau. Periksa koneksi internet kamu, lalu coba lagi — tidak ada angka lama yang ditampilkan untuk koin ini.</p>'
             +'<button type="button" class="retry-btn" data-retry="'+sym+'">Coba lagi</button></section>';
         } else {
-          el.innerHTML='<section class="card panel-msg"><p style="margin:0"><span class="dot pulse"></span>Memuat data '+sym+' langsung dari Binance Spot…</p></section>';
+          el.innerHTML='<section class="card panel-msg"><p style="margin:0"><span class="dot pulse"></span>Memuat data '+sym+'… mencoba Binance Spot, lalu Binance US / OKX / Gate.io bila perlu.</p></section>';
         }
         if(sym===selected) select(sym);
       }
@@ -783,18 +787,29 @@ function panelHTML(sym){
       function updateStatus(){
         var okCount=ORDER.filter(function(s){ return !!DATA[s]; }).length;
         var failCount=ORDER.filter(function(s){ return FAILED[s]; }).length;
+        // sumber cadangan yang benar-benar dipakai koin mana pun saat ini,
+        // diurutkan mengikuti urutan rantai (Binance US, OKX, Gate.io)
+        var fbLabels=[];
+        SOURCES.forEach(function(src){
+          if(src.label==="Binance") return;
+          var used=ORDER.some(function(s){ return !!DATA[s] && SYM_SOURCE[s]===src.label; });
+          if(used) fbLabels.push(src.label);
+        });
+        var fbNote=fbLabels.length
+          ? ' <b>Sebagian data via '+fbLabels.join(" / ")+'</b> karena Binance utama tidak terjangkau.'
+          : '';
         statusDot.className="dot"+(inFlight?" pulse":"");
         if(inFlight && okCount===0){
-          statusText.innerHTML='<b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin.';
+          statusText.innerHTML='<b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin (cadangan otomatis per koin: Binance US → OKX → Gate.io).';
         } else if(okCount>0 && failCount===0){
           statusDot.className="dot ok";
-          statusText.innerHTML='<b>Live — Terakhir diperbarui:</b> '+(lastUpdated?fmtWIB(lastUpdated):"—");
+          statusText.innerHTML='<b>Live — Terakhir diperbarui:</b> '+(lastUpdated?fmtWIB(lastUpdated):"—")+fbNote;
         } else if(okCount>0 && failCount>0){
           statusText.innerHTML='<b>Terakhir diperbarui:</b> '+(lastUpdated?fmtWIB(lastUpdated):"—")
-            +' — <b>'+failCount+' dari 18 koin gagal diperbarui</b>; panelnya ditandai jelas dan dicoba lagi pada siklus berikutnya.';
+            +' — <b>'+failCount+' dari 18 koin gagal diperbarui</b>; panelnya ditandai jelas dan dicoba lagi pada siklus berikutnya.'+fbNote;
         } else if(okCount===0 && failCount>0){
           statusDot.className="dot err";
-          statusText.innerHTML='<b>Gagal memuat data dari Binance</b> — belum ada angka yang bisa ditampilkan. Periksa koneksi internet; halaman mencoba lagi otomatis tiap 60 detik.';
+          statusText.innerHTML='<b>Gagal memuat data dari semua sumber</b> — Binance, Binance US, OKX, dan Gate.io tidak ada yang terjangkau, jadi belum ada angka yang bisa ditampilkan. Periksa koneksi internet; halaman mencoba lagi otomatis tiap 60 detik.';
         }
         if(inFlight){
           refreshInfo.textContent="Sedang memperbarui data…";
@@ -803,33 +818,117 @@ function panelHTML(sym){
 
       function fetchJSON(url){
         var ctrl=("AbortController" in window)?new AbortController():null;
-        var timer=ctrl?setTimeout(function(){ ctrl.abort(); },20000):null;
+        var timer=ctrl?setTimeout(function(){ ctrl.abort(); },15000):null;
         function done(){ if(timer) clearTimeout(timer); }
         return fetch(url, ctrl?{signal:ctrl.signal}:undefined)
           .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
           .then(function(j){ done(); return j; }, function(e){ done(); throw e; });
       }
 
-      function fetchOne(sym){
-        var url1=API+"?symbol="+META[sym].bin+"&interval=1m&limit=500";
-        var urlH=API+"?symbol="+META[sym].bin+"&interval=1h&limit=120";
-        // candle 1 jam untuk deteksi pola: kegagalannya tidak menggagalkan panel,
-        // pola cukup ditandai tidak tersedia pada siklus ini
-        var pH=fetchJSON(urlH).then(function(j){
-          if(!j || j.length<30) return null;
-          return j.map(function(r){ return [r[0], parseFloat(r[1]), parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4])]; });
-        }).catch(function(){ return null; });
-        return fetchJSON(url1)
+      // ---------- rantai sumber data: per koin, dicoba berurutan sampai satu berhasil ----------
+      // Semua sumber dinormalisasi ke bentuk candle Binance yang sama persis:
+      // [openTime(ms), open, high, low, close, baseVol, closeTime, quoteVol, ...]
+      // supaya seluruh hitungan (RSI, EMA, ATR, volatilitas, forecast, S/R, pola
+      // candlestick) identik apa pun sumber yang berhasil memuat koin itu.
+      function pairParts(sym){
+        var bin=META[sym].bin;               // mis. BTCUSDT (XAU memakai PAXGUSDT)
+        var base=bin.slice(0, bin.length-4); // BTC
+        return {dash:base+"-USDT", under:base+"_USDT"};
+      }
+      function fetchBinanceStyle(baseUrl, sym, interval, limit){
+        return fetchJSON(baseUrl+"?symbol="+META[sym].bin+"&interval="+interval+"&limit="+limit)
           .then(function(j){
+            if(!j || !j.length || !j[0] || typeof j[0][0]!=="number") throw new Error("respons tidak dikenal");
+            return j;
+          });
+      }
+      function fetchOKX(sym, bar, limit){
+        var inst=pairParts(sym).dash;
+        function one(extra){
+          return fetchJSON("https://www.okx.com/api/v5/market/candles?instId="+inst+"&bar="+bar+"&limit="+limit+(extra||""))
+            .then(function(j){
+              if(!j || j.code!=="0" || !j.data || !j.data.length) throw new Error("OKX kosong");
+              // OKX mengembalikan TERBARU dulu -> dibalik jadi terlama dulu,
+              // lalu dipetakan: [ts, open, high, low, close, vol, volCcyQuote(idx 7)]
+              return j.data.slice().reverse().map(function(r){
+                var ts=parseInt(r[0],10);
+                return [ts, r[1], r[2], r[3], r[4], r[5], ts+59999, r[7]];
+              });
+            });
+        }
+        if(bar!=="1m") return one("");
+        // Endpoint candles OKX membatasi 300 candle per panggilan walau limit=500
+        // diminta; ambil satu halaman lanjutan (parameter after = candle tertua
+        // sejauh ini) supaya OKX tetap bisa mencapai ambang 400 candle 1-menit.
+        return one("").then(function(first){
+          if(first.length>=400) return first;
+          var oldest=first[0][0];
+          return one("&after="+oldest).then(function(older){
+            var seen={}, merged=[];
+            older.concat(first).forEach(function(c){ if(!seen[c[0]]){ seen[c[0]]=1; merged.push(c); } });
+            merged.sort(function(a,b){ return a[0]-b[0]; });
+            return merged.slice(-500);
+          }).catch(function(){ return first; });
+        });
+      }
+      function fetchGate(sym, interval, limit){
+        var pair=pairParts(sym).under;
+        return fetchJSON("https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair="+pair+"&interval="+interval+"&limit="+limit)
+          .then(function(j){
+            if(!j || !j.length || !j[0] || j[0].length<6) throw new Error("Gate kosong");
+            // Gate: [ts(detik), quoteVol, close, high, low, open, baseVol, ...],
+            // urutan terlama dulu -> ts dikali 1000, dipetakan ke format Binance
+            return j.map(function(r){
+              var ts=parseInt(r[0],10)*1000;
+              return [ts, r[5], r[3], r[4], r[2], r[6], ts+59999, r[1]];
+            });
+          });
+      }
+      // missing = koin yang memang tidak diperdagangkan di sumber itu (dari brief):
+      // dilewati langsung supaya tidak membuang waktu menunggu error.
+      var SOURCES=[
+        {label:"Binance", missing:{},
+         m1:function(sym){ return fetchBinanceStyle(API, sym, "1m", 500); },
+         h1:function(sym){ return fetchBinanceStyle(API, sym, "1h", 120); }},
+        {label:"Binance US", missing:{XPL:1, PYTH:1, WCT:1, SOMI:1},
+         m1:function(sym){ return fetchBinanceStyle("https://api.binance.us/api/v3/klines", sym, "1m", 500); },
+         h1:function(sym){ return fetchBinanceStyle("https://api.binance.us/api/v3/klines", sym, "1h", 120); }},
+        {label:"OKX", missing:{SOMI:1},
+         m1:function(sym){ return fetchOKX(sym, "1m", 500); },
+         h1:function(sym){ return fetchOKX(sym, "1H", 120); }},
+        {label:"Gate.io", missing:{},
+         m1:function(sym){ return fetchGate(sym, "1m", 500); },
+         h1:function(sym){ return fetchGate(sym, "1h", 120); }}
+      ];
+      var SYM_SOURCE={};   // label sumber yang terakhir berhasil memuat koin ini
+
+      function fetchOne(sym){
+        function trySource(idx){
+          if(idx>=SOURCES.length) return Promise.reject(new Error("semua sumber gagal"));
+          var src=SOURCES[idx];
+          if(src.missing[sym]) return trySource(idx+1);
+          return src.m1(sym).then(function(j){
+            // ambang sama seperti sebelumnya: panel butuh minimal 400 candle
+            // 1-menit; sumber yang mengembalikan kurang dari itu dilewati
             if(!j || j.length<400) throw new Error("data kurang");
-            return pH.then(function(hourly){
-              var d=computeData(sym, j);
+            // candle 1 jam diambil dari sumber yang sama; kegagalannya tidak
+            // menggagalkan panel, pola cukup ditandai tidak tersedia
+            return src.h1(sym).then(function(hj){
+              if(!hj || hj.length<30) return null;
+              return hj.map(function(r){ return [r[0], parseFloat(r[1]), parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4])]; });
+            }).catch(function(){ return null; }).then(function(hourly){
+              var d=computeData(sym, j, src.label);
               if(hourly){ d.pattern=detectPattern(hourly); }
               else { d.pattern=null; d.patternNA=true; }
               DATA[sym]=d;
+              SYM_SOURCE[sym]=src.label;
               FAILED[sym]=false; STALE[sym]=false; SYM_TIME[sym]=new Date();
             });
-          })
+          }).catch(function(){
+            return trySource(idx+1);
+          });
+        }
+        return trySource(0)
           .catch(function(){
             FAILED[sym]=true; if(DATA[sym]) STALE[sym]=true;
           })
