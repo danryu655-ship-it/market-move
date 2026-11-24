@@ -1,0 +1,42 @@
+{
+  "updatedAtWib": "24/11/2026, 21:24:48",
+  "balance": 1000,
+  "positions": [
+    {
+      "coin": "SOMI",
+      "pair": "SOMIUSDT",
+      "side": "short",
+      "entry": 0.113767,
+      "qty": 1848.53,
+      "sl": 0.115931,
+      "tp": 0.109439,
+      "riskUsd": 4,
+      "atr": 0.00144259,
+      "bias": 34,
+      "rsi1h": 45.5,
+      "openedAt": "2026-11-24T12:29:17.282Z",
+      "source": "Gate.io"
+    },
+    {
+      "coin": "XAU",
+      "pair": "PAXGUSDT",
+      "side": "short",
+      "entry": 3608.88,
+      "qty": 0.148613,
+      "sl": 3635.79,
+      "tp": 3555.05,
+      "riskUsd": 4,
+      "atr": 17.9437,
+      "bias": 38,
+      "rsi1h": 43.5,
+      "openedAt": "2026-11-24T14:13:57.004Z",
+      "source": "Binance Spot"
+    }
+  ],
+  "trades": [],
+  "daily": {
+    "date": "2026-11-24",
+    "realizedPnl": 0
+  },
+  "halted": false
+}
