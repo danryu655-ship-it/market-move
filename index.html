@@ -1,976 +1,859 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="dark" />
-    <link rel="icon" href="data:," />
-    <title>Market Move — BTC · ETH · XAU · SHIB · PENGU · BNB · SUI · XPL · PUMP · ENA · ONDO · PYTH · ZEC · ASTER · JUP · HYPE · WCT · SOMI + Pemantau Crypto Live</title>
-    <style>
-      :root{
-        --bg:#0a0a0c; --card:#17171b; --card2:#1f1f24; --line:#2a2a31;
-        --txt:#f2f2f4; --muted:#9a9aa5; --faint:#6d6d78;
-        --green:#1ec98b; --green-dim:rgba(30,201,139,.14);
-        --red:#f6465d; --red-dim:rgba(246,70,93,.13);
-        --amber:#f5b90d; --teal:#2bd9c7;
-        --radius:14px;
-      }
-      *{box-sizing:border-box}
-      html{color-scheme:dark}
-      body{margin:0;background:var(--bg);color:var(--txt);
-        font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-        -webkit-font-smoothing:antialiased}
-      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
-      .wrap{max-width:880px;margin:0 auto;padding:18px 14px 40px}
-      h1{font-size:1.45rem;margin:2px 0 4px;letter-spacing:.2px}
-      .sub{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 14px}
-      .snapshot{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;background:var(--card);
-        border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.8rem;color:var(--muted);margin-bottom:16px}
-      .snapshot b{color:var(--txt);font-weight:600}
-      .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block;margin-right:6px;vertical-align:1px}
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>Market Move — Trading Desk</title>
+<style>
+  :root{
+    --bg:#050b12; --bg2:#08131f; --panel:#0a1826; --panel2:#0d1f31; --line:#16324a;
+    --cyan:#22d3ee; --cyan2:#0ea5c6; --teal:#2dd4bf; --green:#34d399; --red:#fb4d6d;
+    --amber:#fbbf24; --txt:#e6f4fb; --mut:#8fb3c7; --mut2:#5f8299;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+  button,select,[role="button"]{min-height:44px}
+  a{color:var(--cyan)}
+  .wrap{max-width:1180px;margin:0 auto;padding:14px 14px 48px}
+  h1{font-size:26px;margin:4px 0 2px;letter-spacing:.2px}
+  h1 .accent{color:var(--cyan)}
+  .sub{color:var(--mut);font-size:13.5px;margin:0 0 14px}
+  h2{font-size:18px;margin:0 0 4px}
+  h3{font-size:15px;margin:0 0 6px}
+  .panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:0 0 14px}
+  .badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:3px 8px;border-radius:999px;vertical-align:middle}
+  .badge.live{background:rgba(45,212,191,.15);color:var(--teal);border:1px solid rgba(45,212,191,.45)}
+  .badge.visual{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.45)}
+  .badge.standby{background:rgba(143,179,199,.12);color:var(--mut);border:1px solid rgba(143,179,199,.4)}
+  .badge.err{background:rgba(251,77,109,.12);color:var(--red);border:1px solid rgba(251,77,109,.45)}
+  .badge.stale{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.45)}
+  .panelhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .panelhead .left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .note{color:var(--mut);font-size:12.5px}
+  /* controls */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+  .controls label{font-size:12px;color:var(--mut);display:block;margin-bottom:4px}
+  select{background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;min-width:210px}
+  .btn{background:var(--cyan2);color:#02141c;border:0;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.55;cursor:wait}
+  .statusline{margin-top:10px;font-size:13px;color:var(--mut);display:flex;flex-wrap:wrap;gap:14px}
+  .statusline b{color:var(--txt)}
+  /* strip */
+  .strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .mini{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;text-align:left;color:var(--txt);width:100%}
+  .mini:hover{border-color:var(--cyan2)}
+  .mini .sym{font-weight:800;font-size:15px}
+  .mini .pair{color:var(--mut2);font-size:11.5px}
+  .mini .price{font-size:17px;font-weight:700;margin:2px 0}
+  .mini canvas{width:100%;height:52px;display:block}
+  .mini .row{display:flex;justify-content:space-between;gap:6px;font-size:12px}
+  .up{color:var(--green)} .down{color:var(--red)}
+  .biaspill{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(34,211,238,.12);color:var(--cyan);border:1px solid rgba(34,211,238,.35)}
+  /* bias bar */
+  .biasbar{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#12283c;margin:8px 0 4px}
+  .biasbar .long{background:var(--green)} .biasbar .short{background:var(--red)}
+  .biaslabels{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+  .bigprice{font-size:32px;font-weight:800;letter-spacing:.2px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  .metric{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .metric .k{font-size:12px;color:var(--mut)}
+  .metric .v{font-size:19px;font-weight:700;margin-top:2px}
+  .metric .d{font-size:12px;color:var(--mut)}
+  canvas#mainChart{width:100%;height:340px;display:block;background:#06101b;border:1px solid var(--line);border-radius:12px}
+  @media(max-width:760px){canvas#mainChart{height:280px}}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:var(--mut);margin-top:8px}
+  .pat{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);margin-bottom:8px}
+  .pat .name{font-weight:700}
+  .pat .when{color:var(--mut2);font-size:12px}
+  .tag-bull{color:var(--green);font-weight:700}.tag-bear{color:var(--red);font-weight:700}.tag-net{color:var(--amber);font-weight:700}
+  ul.drivers{margin:6px 0 0;padding-left:18px}
+  ul.drivers li{margin-bottom:6px}
+  /* orchestrator */
+  .orch{text-align:center}
+  .orch-center{display:inline-block;background:#0b2233;border:1px solid var(--cyan2);color:var(--txt);border-radius:12px;padding:12px 20px;font-weight:800;letter-spacing:.4px}
+  .orch-center small{display:block;color:var(--cyan);font-weight:700;letter-spacing:1.2px;font-size:11px}
+  .orch-line{width:2px;height:22px;background:var(--cyan2);margin:0 auto}
+  .agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:4px}
+  .agent{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:left}
+  .agent .an{font-weight:700;font-size:14px}
+  .agent .as{font-size:12px;color:var(--mut);margin-top:3px;min-height:32px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{color:var(--mut);font-size:12px;letter-spacing:.4px}
+  /* order book */
+  .ob{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.ob{grid-template-columns:1fr}}
+  .ob h4{margin:0 0 6px;font-size:13px;color:var(--mut)}
+  .obrow{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;font-size:13px;padding:2.5px 6px;border-radius:6px}
+  .obrow.ask{background:rgba(251,77,109,.07)} .obrow.bid{background:rgba(52,211,153,.07)}
+  /* hemisphere */
+  .hemiwrap{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:center}
+  @media(max-width:760px){.hemiwrap{grid-template-columns:1fr}}
+  .scorebar{height:9px;border-radius:999px;background:#12283c;overflow:hidden}
+  .scorebar>div{height:100%;background:linear-gradient(90deg,var(--cyan2),var(--teal))}
+  .scorerow{display:grid;grid-template-columns:64px 1fr 44px;gap:10px;align-items:center;margin-bottom:7px;font-size:13.5px}
+  /* activity */
+  .feed{font-size:13.5px}
+  .feed .item{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);margin-bottom:8px}
+  .feed .t{color:var(--mut2);font-size:12px}
+  .errbox{border:1px solid rgba(251,77,109,.5);background:rgba(251,77,109,.08);border-radius:12px;padding:12px}
+  @media(max-width:760px){
+    table{font-size:12px}
+    th,td{padding:6px 5px}
+    .badge{font-size:9.5px;padding:2px 5px}
+    td{word-break:break-word}
+  }
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;word-break:break-all}
+  .hidden{display:none!important}
+  footer{color:var(--mut2);font-size:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
 
-      /* coin picker (dropdown) */
-      .picker{margin-bottom:14px}
-      .picker label{display:block;color:var(--muted);font-size:.8rem;font-weight:600;margin-bottom:7px}
-      .picker select{width:100%;appearance:none;-webkit-appearance:none;
-        background-color:var(--card);
-        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239a9aa5' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
-        background-repeat:no-repeat;background-position:right 14px center;
-        border:1px solid var(--line);border-radius:var(--radius);color:var(--txt);
-        font:inherit;font-size:1rem;font-weight:700;padding:12px 42px 12px 14px;cursor:pointer}
-      .picker select:focus{outline:none;border-color:var(--amber)}
-      .picker-summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:10px;
-        background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:11px 13px}
-      .picker-summary .price{font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums}
-      .picker-summary .chg{font-size:.85rem;font-weight:600;font-variant-numeric:tabular-nums}
-      .picker-summary .pair{color:var(--faint);font-size:.78rem}
-      .up{color:var(--green)} .down{color:var(--red)}
-      .chip{display:inline-block;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.2px}
-      .chip.long{background:var(--green-dim);color:var(--green)}
-      .chip.short{background:var(--red-dim);color:var(--red)}
-      .chip.flat{background:rgba(154,154,165,.16);color:var(--muted)}
+  <h1>Market <span class="accent">Move</span> · Trading Desk</h1>
+  <p class="sub">Baca arah pasar 1 jam ke depan dari data candle 1 menit yang diambil langsung di browser — tanpa kunci API. Skor “Bias Momentum” dihitung dari RSI, EMA, dan momentum harga; ini <b>bukan</b> data Long/Short futures asli (endpoint futures Binance terblokir geo), jadi labelnya memang “bias”, bukan posisi trader.</p>
 
-      .panel{display:none}
-      .panel.active{display:block}
-      .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-      .card h2{font-size:1.05rem;margin:0 0 12px;font-weight:700}
-      .card h2 .info{color:var(--faint);font-weight:400;font-size:.85rem}
-
-      /* bias bar */
-      .bias-head{display:flex;justify-content:space-between;font-weight:700;font-size:.95rem;margin-bottom:8px}
-      .bias-bar{display:flex;height:9px;border-radius:99px;overflow:hidden;background:var(--red)}
-      .bias-bar .fill{background:var(--green);height:100%}
-      .bias-note{color:var(--muted);font-size:.8rem;line-height:1.55;margin:10px 0 0}
-      .verdict{margin-top:12px;background:var(--card2);border-radius:10px;padding:11px 13px;font-size:.9rem;line-height:1.6}
-      .verdict b{color:var(--amber)}
-
-      .forecast-box{background:var(--card2);border-radius:10px;padding:13px 14px;display:flex;
-        justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-      .forecast-box .lbl{color:var(--muted);font-size:.78rem}
-      .forecast-box .big{font-size:1.55rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15}
-      .forecast-box .side{text-align:right;font-size:.92rem;font-weight:600;line-height:1.7;font-variant-numeric:tabular-nums}
-      svg.chart{width:100%;height:auto;display:block}
-      .legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.78rem;margin-top:10px}
-      .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0}
-      .legend .lg-c::before{background:linear-gradient(90deg,var(--green) 50%,var(--red) 50%)}
-      .legend .lg-f::before{background:linear-gradient(135deg,var(--green) 50%,var(--red) 50%);opacity:.7}
-      .legend .lg-p::before{background:var(--amber);transform:rotate(45deg);border-radius:1.5px}
-
-      /* pola candlestick */
-      .pat-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-      .pat-name{font-size:1.25rem;font-weight:800}
-      .pat-age{color:var(--faint);font-size:.78rem;margin-top:5px}
-      .pat-desc{font-size:.92rem;line-height:1.6;margin:9px 0 0}
-
-      .sr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .sr .cell{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
-      .sr .lbl{color:var(--muted);font-size:.85rem;margin-bottom:4px}
-      .sr .val{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
-      .sr .val.g{color:var(--green)} .sr .val.r{color:var(--red)}
-      .sr .dist{color:var(--faint);font-size:.78rem;margin-top:3px;font-variant-numeric:tabular-nums}
-
-      .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-      .stat{background:var(--card2);border-radius:10px;padding:10px 12px}
-      .stat .k{color:var(--faint);font-size:.72rem;margin-bottom:3px}
-      .stat .v{font-weight:700;font-size:.98rem;font-variant-numeric:tabular-nums}
-
-      .notebox{border:1px solid rgba(245,185,13,.45);border-radius:10px;padding:11px 13px;background:rgba(245,185,13,.05);font-size:.86rem;line-height:1.6;margin-bottom:12px}
-      .notebox b{color:var(--amber)}
-      .drivers h2{border-left:4px solid var(--amber);padding-left:10px}
-      .driver{border:1px solid rgba(245,185,13,.45);border-radius:12px;padding:13px 15px;margin-bottom:10px;background:rgba(245,185,13,.05)}
-      .driver.plain{border-color:var(--line);background:var(--card2)}
-      .driver .tag{color:var(--amber);font-weight:800;font-size:1.05rem;margin-bottom:4px}
-      .driver.plain .tag{color:var(--muted);font-size:.8rem;letter-spacing:.4px}
-      .driver p{margin:0;font-size:.93rem;line-height:1.6}
-      .driver .src{color:var(--faint);font-size:.75rem;margin-top:6px}
-
-      /* pemantau live */
-      .live h2{border-left:4px solid var(--teal);padding-left:10px}
-      .live-meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.8rem;color:var(--muted);margin-bottom:12px}
-      .live-meta b{color:var(--txt);font-weight:600}
-      .dot-live{width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;margin-right:6px;vertical-align:1px}
-      .warn{border:1px solid rgba(245,185,13,.45);border-radius:10px;padding:11px 13px;background:rgba(245,185,13,.05);
-        font-size:.86rem;line-height:1.6;margin-bottom:10px}
-      .warn b{color:var(--amber)}
-      .night{border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--card2);
-        color:var(--muted);font-size:.84rem;line-height:1.6;margin-bottom:14px}
-      .night b{color:var(--txt)}
-      .sig{border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-bottom:10px;background:var(--card2)}
-      .sig-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-      .sig-name{font-weight:800;font-size:1.12rem}
-      .sig-name .pair{color:var(--faint);font-weight:600;font-size:.85rem}
-      .badge{display:inline-block;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.2px;
-        background:rgba(43,217,199,.13);color:var(--teal);white-space:nowrap}
-      .sig-age{color:var(--muted);font-size:.8rem;margin-bottom:10px}
-      .sig-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:11px}
-      .sig-stat{background:var(--card);border-radius:8px;padding:8px 10px}
-      .sig-stat .k{color:var(--faint);font-size:.68rem;margin-bottom:2px}
-      .sig-stat .v{font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums}
-      .addr{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.74rem;color:var(--muted);
-        word-break:break-all;line-height:1.5;margin-bottom:11px}
-      .addr span{color:var(--faint)}
-      .sig-links{display:flex;gap:8px;flex-wrap:wrap}
-      .sig-links a{display:inline-flex;align-items:center;min-height:2.25rem;padding:6px 13px;border-radius:9px;
-        border:1px solid var(--line);background:var(--card);color:var(--txt);text-decoration:none;font-size:.84rem;font-weight:600}
-      .sig-links a.primary{border-color:var(--teal);color:var(--teal)}
-      .srcrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
-      .srcitem{background:var(--card2);border-radius:10px;padding:10px 12px;font-size:.8rem;line-height:1.55;color:var(--muted)}
-      .srcitem b{color:var(--txt);display:block;font-size:.86rem}
-      .srcitem .new{color:var(--teal);font-weight:700}
-      .live-foot{color:var(--faint);font-size:.78rem;line-height:1.6;margin:12px 0 0}
-
-      .dot.ok{background:var(--green)}
-      .dot.err{background:var(--red)}
-      .dot.pulse{animation:dotpulse 1.1s ease-in-out infinite}
-      @keyframes dotpulse{50%{opacity:.3}}
-      @media (prefers-reduced-motion: reduce){ .dot.pulse{animation:none} }
-      .retry-btn{appearance:none;border:1px solid var(--line);background:var(--card2);color:var(--txt);
-        font:inherit;font-size:.8rem;font-weight:700;padding:6px 13px;border-radius:9px;cursor:pointer;min-height:2.25rem}
-      .retry-btn:hover{border-color:var(--amber);color:var(--amber)}
-      .panel-msg p{color:var(--muted);line-height:1.6;font-size:.92rem}
-      .panel-msg .dot{margin-right:8px}
-
-      .howto{color:var(--muted);font-size:.86rem;line-height:1.7}
-      .howto b{color:var(--txt)}
-      .howto ul{margin:6px 0 0;padding-left:18px}
-      .disclaimer{border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);
-        font-size:.82rem;line-height:1.6;background:var(--card)}
-      @media (max-width:560px){
-        .chip{font-size:.62rem;padding:3px 6px}
-        .stats{grid-template-columns:1fr 1fr}
-        .forecast-box .big{font-size:1.3rem}
-        .sr .val{font-size:1.25rem}
-        .sig-stats{grid-template-columns:1fr 1fr}
-        .srcrow{grid-template-columns:1fr}
-      }
-    </style>
-  </head>
-  <body>
-    <main class="wrap">
-      <h1>Market Move</h1>
-      <p class="sub">Membaca arah crypto 1 jam ke depan: bias momentum 1 jam, pola candlestick klasik dari candle 1 jam, rentang forecast dari volatilitas 1 jam terakhir,
-        dan level support / resistance jangka pendek — untuk BTC, ENA, ONDO, ETH, SHIB, PENGU, BNB, SUI, XPL, PUMP, PYTH, ZEC, ASTER, JUP, HYPE, WCT, SOMI, dan XAU (diwakili token emas PAXG). Di bawah panel koin ada
-        <a href="#pemantau" style="color:var(--teal)">Pemantau Crypto Live</a>: sinyal pool baru BSC dari monitor sinyal terakhir. Panel koin di halaman ini <b>live</b> — datanya ditarik langsung dari Binance setiap halaman dibuka dan diperbarui otomatis tiap 60 detik. Bila Binance tidak terjangkau dari jaringanmu, tiap koin otomatis dicoba dari sumber cadangan berurutan — <b>Binance US → OKX → Gate.io</b> — supaya grafik tetap muncul, dan bar status di bawah menulis sumber yang benar-benar dipakai; bagian Pemantau di bawah tetap cuplikan monitor terakhir.</p>
-
-      <div class="snapshot"><span><span class="dot pulse" id="statusDot"></span><span id="statusText"><b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin (cadangan otomatis per koin: Binance US → OKX → Gate.io).</span></span>
-        <span>Sumber: Binance Spot · cadangan Binance US → OKX → Gate.io · tanpa API key</span>
-        <span id="refreshInfo">Auto-refresh tiap 60 detik</span>
-        <button type="button" class="retry-btn" id="refreshBtn">Perbarui sekarang</button></div>
-
-      <div class="picker">
-        <label for="coinSelect">Pilih koin</label>
-        <select id="coinSelect" aria-label="Pilih koin"></select>
-        <div class="picker-summary" id="coinSummary" aria-live="polite"></div>
+  <!-- ============ CONTROLS ============ -->
+  <section class="panel" aria-label="Pilih koin">
+    <div class="controls">
+      <div>
+        <label for="coinSelect">Koin (18)</label>
+        <select id="coinSelect"></select>
       </div>
+      <div>
+        <button class="btn" id="refreshBtn" type="button">Perbarui sekarang</button>
+      </div>
+      <div class="note" style="max-width:420px">Rantai sumber per koin, dicoba berurutan sampai berhasil: Binance Spot → Binance US → OKX → Gate.io. Tiap koin independen — satu koin gagal tidak menghentikan koin lain.</div>
+    </div>
+    <div class="statusline">
+      <span>Terakhir diperbarui: <b id="lastUpdated">—</b></span>
+      <span>Sumber aktif: <b id="activeSource">—</b></span>
+      <span>Auto-refresh: <b>60 detik</b> (<span id="countdown">60</span> dtk)</span>
+      <span id="staleFlag"></span>
+    </div>
+    <div id="coinError" class="errbox hidden" style="margin-top:10px"></div>
+  </section>
 
-      <div id="panels"></div>
+  <!-- ============ LIVE STRIP 10 ============ -->
+  <section class="panel" aria-label="Strip chart live">
+    <div class="panelhead"><div class="left"><h2>Live Charts</h2><span class="badge live lvb">DATA LIVE</span></div><span class="note">10 koin · klik chart untuk membuka panel detail koin itu</span></div>
+    <div class="strip" id="strip"></div>
+  </section>
 
-      <section class="card live" id="pemantau">
-        <h2>Pemantau Crypto Live <span class="info">· sinyal pool baru BSC</span></h2>
-        <div class="live-meta"><span><span class="dot-live"></span><b>Pengecekan terakhir monitor:</b> Senin, 23 Nov 2026 · 01:58 WIB</span>
-          <span><b>2 sinyal baru</b> dari 3 sumber yang dicek</span></div>
+  <!-- ============ DETAIL ============ -->
+  <section class="panel" aria-label="Detail koin">
+    <div class="panelhead"><div class="left"><h2 id="detailTitle">Detail — BTC/USDT</h2><span class="badge live lvb">DATA LIVE</span></div><span class="note" id="detailSrc"></span></div>
 
-        <div class="warn"><b>Baca dulu:</b> sinyal di bagian ini berjenis <b>new-pool momentum</b> — pool baru di BSC yang sedang ramai
-          transaksinya menurut GeckoTerminal. Ini <b>bukan bocoran listing</b> di exchange mana pun dan bukan jaminan tokennya aman:
-          pool berumur menit dengan likuiditas tipis sangat rawan rug pull dan harga bisa hilang dalam hitungan menit. Selalu cek kontraknya sendiri sebelum menyentuh token seperti ini.</div>
+    <div class="biaslabels"><span class="up">Bias Naik <span id="longPct">—</span></span><span class="down">Bias Turun <span id="shortPct">—</span></span></div>
+    <div class="biasbar"><div class="long" id="longBar" style="width:0%"></div><div class="short" id="shortBar" style="width:0%"></div></div>
+    <p class="note" style="margin:2px 0 12px">Bar ini = skor Bias Momentum (0–100) hasil hitungan indikator di bawah, bukan rasio Long/Short futures.</p>
 
-        <div class="night"><b>Kenapa sinyal jam 01:58 ini hanya tercatat di sini:</b> monitor berjalan tiap 15 menit, tetapi pada jam malam
-          23:00–07:00 WIB sinyal hanya dicatat, tidak diteruskan sebagai alert chat. Kedua sinyal di bawah ini termasuk yang dicatat pada jam malam.</div>
+    <div class="grid2">
+      <div class="metric"><div class="k">Forecast Start &amp; Harga Terakhir</div><div class="bigprice" id="lastPrice">—</div><div class="d" id="forecastStartInfo">Forecast Start: —</div></div>
+      <div class="metric"><div class="k">Forecast 1 Jam (rentang ATR)</div><div class="v up">↗ Possible High <span id="fcHigh">—</span></div><div class="v down">↘ Possible Low <span id="fcLow">—</span></div><div class="d">Estimasi statistik dari ATR — bukan janji harga.</div></div>
+    </div>
 
-        <div class="sig">
-          <div class="sig-top"><span class="sig-name">GOAT <span class="pair">/ WBNB · BSC</span></span><span class="badge">New-Pool Momentum</span></div>
-          <div class="sig-age">Pool dibuat 23 Nov 2026 · 01:49 WIB — ±9 menit sebelum pengecekan 01:58 WIB.</div>
-          <div class="sig-stats">
-            <div class="sig-stat"><div class="k">Buys 1 jam</div><div class="v">123</div></div>
-            <div class="sig-stat"><div class="k">Volume 24 jam</div><div class="v">$26.719</div></div>
-            <div class="sig-stat"><div class="k">FDV</div><div class="v">$87.261</div></div>
-            <div class="sig-stat"><div class="k">Reserve (likuiditas pool)</div><div class="v">$15.585</div></div>
-          </div>
-          <div class="addr"><span>Alamat pool / kontrak:</span> 0x93cd5f9e08969df78f5db4a636ff9376aa0a285e</div>
-          <div class="sig-links">
-            <a class="primary" href="https://www.geckoterminal.com/bsc/pools/0x93cd5f9e08969df78f5db4a636ff9376aa0a285e" target="_blank" rel="noopener">Lihat di GeckoTerminal ↗</a>
-            <a href="https://bscscan.com/address/0x93cd5f9e08969df78f5db4a636ff9376aa0a285e" target="_blank" rel="noopener">Cek di BscScan ↗</a>
-          </div>
-        </div>
+    <h3 style="margin:14px 0 6px">Forecast Range <span class="note">— candle = harga aktual · kipas (fan) = rentang kemungkinan 1 jam dari titik Forecast Start</span></h3>
+    <canvas id="mainChart" width="900" height="340"></canvas>
+    <div class="legend"><span>— Support (garis putus hijau)</span><span>— Resistance (garis putus merah)</span><span>▲▼ tanda pola candlestick</span><span id="chartNote"></span></div>
 
-        <div class="sig">
-          <div class="sig-top"><span class="sig-name">蚁巢 <span class="pair">/ WBNB · BSC</span></span><span class="badge">New-Pool Momentum</span></div>
-          <div class="sig-age">Pool dibuat 23 Nov 2026 · 01:57 WIB — ±2 menit sebelum pengecekan 01:58 WIB.</div>
-          <div class="sig-stats">
-            <div class="sig-stat"><div class="k">Buys 1 jam</div><div class="v">10</div></div>
-            <div class="sig-stat"><div class="k">Volume 24 jam</div><div class="v">$898</div></div>
-            <div class="sig-stat"><div class="k">FDV</div><div class="v">$21.834</div></div>
-            <div class="sig-stat"><div class="k">Reserve (likuiditas pool)</div><div class="v">$7.736</div></div>
-          </div>
-          <div class="addr"><span>Alamat pool / kontrak:</span> 0xf410e9c92f0216e2ae9113b3012e3c53f562a016</div>
-          <div class="sig-links">
-            <a class="primary" href="https://www.geckoterminal.com/bsc/pools/0xf410e9c92f0216e2ae9113b3012e3c53f562a016" target="_blank" rel="noopener">Lihat di GeckoTerminal ↗</a>
-            <a href="https://bscscan.com/address/0xf410e9c92f0216e2ae9113b3012e3c53f562a016" target="_blank" rel="noopener">Cek di BscScan ↗</a>
-          </div>
-        </div>
+    <div class="grid3" style="margin-top:14px">
+      <div class="metric"><div class="k">RSI 14 (Wilder, candle 1 mnt)</div><div class="v" id="mRsi">—</div><div class="d" id="mRsiD"></div></div>
+      <div class="metric"><div class="k">EMA 20 / EMA 50</div><div class="v" id="mEma" style="font-size:16px">—</div><div class="d" id="mEmaD"></div></div>
+      <div class="metric"><div class="k">ATR 14 · Volatilitas 1 Jam</div><div class="v" id="mAtr" style="font-size:16px">—</div><div class="d" id="mVol"></div></div>
+      <div class="metric"><div class="k">Support / Resistance — 1 Jam</div><div class="v" style="font-size:16px"><span class="up" id="sr1s">—</span> / <span class="down" id="sr1r">—</span></div><div class="d">Low &amp; high terendah/tertinggi 60 menit terakhir</div></div>
+      <div class="metric"><div class="k">Support / Resistance — 6 Jam</div><div class="v" style="font-size:16px"><span class="up" id="sr6s">—</span> / <span class="down" id="sr6r">—</span></div><div class="d">Dari candle 1 jam (fallback: 360 candle 1 menit)</div></div>
+      <div class="metric"><div class="k">Perubahan 1 Jam · Volume 1 Jam</div><div class="v" id="mChg" style="font-size:16px">—</div><div class="d" id="mVolQ"></div></div>
+    </div>
 
-        <div class="srcrow">
-          <div class="srcitem"><b>GeckoTerminal</b>20 pool dicek · <span class="new">2 sinyal baru</span> (dua kartu di atas)</div>
-          <div class="srcitem"><b>PancakeSwap</b>13 token dicek · 0 sinyal baru</div>
-          <div class="srcitem"><b>Trust Wallet</b>0 commit dicek · 0 sinyal baru — pengecekan dilewati karena GitHub rate limit</div>
-        </div>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <h3>Pola Candlestick <span class="badge live lvb">DATA LIVE</span></h3>
+        <div id="patterns"><p class="note">Memuat…</p></div>
+      </div>
+      <div>
+        <h3>Key Drivers <span class="badge live lvb">DATA LIVE</span></h3>
+        <p class="note" style="margin:0">Dibangun dari angka indikator koin ini pada hitungan terakhir — bukan berita eksternal.</p>
+        <ul class="drivers" id="drivers"></ul>
+      </div>
+    </div>
+  </section>
 
-        <p class="live-foot">Angka di bagian ini adalah isi file hasil monitor (latest.json) pada pengecekan 01:58 WIB di atas — bagian Pemantau ini
-          tidak menarik data sendiri (berbeda dengan panel koin di atas yang live dari Binance), jadi sinyal yang lebih baru dari itu belum tampil di sini. Minta dibuatkan ulang untuk hasil monitor terbaru.</p>
-      </section>
+  <!-- ============ ORCHESTRATOR ============ -->
+  <section class="panel" aria-label="Diagram agen">
+    <div class="panelhead"><div class="left"><h2>Orchestrator &amp; 12 Agen</h2></div><span class="note">Gaya Trading Desk — tiap agen dilabeli sumber datanya dengan jujur</span></div>
+    <div class="orch">
+      <div class="orch-center"><small>CLAUDE · FABLE 5.2</small>ORCHESTRATOR</div>
+      <div class="orch-line"></div>
+    </div>
+    <div class="agents" id="agents"></div>
+    <h3 style="margin:16px 0 6px">Agent Roster</h3>
+    <div style="overflow-x:auto">
+    <table><thead><tr><th>Agen</th><th>Tugas</th><th>Status</th><th>Sumber</th></tr></thead><tbody id="roster"></tbody></table>
+    </div>
+    <p class="note">Agen bertanda <b>VISUAL</b> tidak punya sumber data nyata di halaman ini (tidak ada feed whale, sentimen, atau berita yang terhubung) — tampilannya hanya kerangka peran. <b>Order Exec</b> selalu Standby: halaman ini tidak mengeksekusi order apa pun. Tidak ada saldo atau angka hasil trading simulasi di halaman ini.</p>
+  </section>
 
-      <section class="card howto">
-        <h2>Cara membaca halaman ini</h2>
-        <ul>
-          <li><b>Data live panel koin</b> — candle 1-menit terbaru ditarik langsung dari Binance Spot (data-api.binance.vision) setiap halaman dibuka, lalu diperbarui otomatis tiap 60 detik; jam pembaruan terakhir tampil di bar status di atas. Bila Binance tidak terjangkau dari jaringanmu, tiap koin otomatis dicoba berurutan dari <b>Binance US, lalu OKX, lalu Gate.io</b> — candle dari sumber cadangan dinormalisasi ke format yang sama persis, jadi semua hitungan di bawah setara. Bar status dan ringkasan koin menulis sumber yang benar-benar dipakai. Bila semua sumber gagal, panel yang gagal ditandai jelas — angka lama tidak pernah ditampilkan seolah-olah baru.</li>
-          <li><b>Bias Momentum</b> — skor arah dari RSI(14), posisi harga terhadap EMA20/EMA50 pada candle 1-menit, warna candle, dan perubahan harga 1 jam di data spot dari sumber yang memuat panel itu (Binance / Binance US / OKX / Gate.io). Ini <b>bukan</b> rasio posisi Long/Short futures (endpoint futures Binance tidak bisa diakses dari lokasi server saat pengambilan data), jadi jangan dibaca sebagai posisi trader futures.</li>
-          <li><b>Forecast Range</b> — harga terakhir ± volatilitas terealisasi 1 jam terakhir (simpangan baku return 1-menit × √60). Ini rentang statistik: harga <i>bisa</i> keluar dari rentang ini, terutama saat ada berita besar.</li>
-          <li><b>Pola Candlestick</b> — pola klasik (Hammer, Inverted Hammer, Shooting Star, Hanging Man, Doji termasuk Dragonfly &amp; Gravestone, Engulfing, Piercing Line, Dark Cloud Cover, Morning/Evening Star, Three White Soldiers, Three Black Crows, dan Harami) dideteksi langsung di browser dari candle 1 jam sumber yang sama dengan data 1-menit panel itu (Binance / Binance US / OKX / Gate.io) dengan definisi standar: perbandingan badan candle, ekor atas/bawah, dan posisi terhadap tren (EMA20 candle 1 jam). Yang tampil adalah pola paling baru dari 15 candle 1 jam terakhir, lengkap dengan label Bullish/Bearish/Netral dan umur candle-nya; candle berpola ditandai berlian berwarna bertuliskan nama pola pada grafik Forecast Range bila jamnya masuk jendela grafik. Candle 1 jam yang masih berjalan belum ditutup, jadi polanya masih bisa berubah sebelum jam berganti. Bila tidak ada pola yang memenuhi definisi, panel menulis <b>"Tidak ada pola"</b> apa adanya. Pola adalah konteks bacaan, bukan jaminan arah.</li>
-          <li><b>Support / Resistance kuat</b> — low / high 6 jam terakhir (candle 1-menit dari sumber panel itu), disesuaikan untuk horizon 1 jam. Level terdekat memakai high/low 1 jam terakhir.</li>
-          <li><b>Fan Area</b> di grafik mulai dari titik awal forecast (candle 30 menit lalu, ditandai lingkaran putih dan garis vertikal putus-putus) lalu melebar menuju Possible High / Possible Low di ujung horizon 1 jam dari titik awal itu. Candle yang terjadi setelah titik awal digambar <b>di dalam</b> area fan — jadi kelihatan apakah harga aktual masih bergerak di dalam rentang forecast atau sudah keluar. Garis putih putus-putus horizontal adalah Last Price yang dipanjangkan ke tepi kanan; garis teal putus-putus adalah Support Level (low 1 jam terakhir).</li>
-          <li><b>Pemantau Crypto Live</b> — hasil monitor sinyal yang berjalan tiap 15 menit di luar halaman ini (GeckoTerminal, PancakeSwap, Trust Wallet). Sinyal <b>new-pool momentum</b> artinya pool BSC yang baru dibuat dan sedang ramai dibeli — <b>bukan</b> bocoran atau pengumuman listing. FDV = nilai pasar terdilusi penuh versi GeckoTerminal; Reserve = likuiditas yang terkunci di pool saat dicek; Buys 1 jam = jumlah transaksi beli dalam 1 jam terakhir. Pada jam 23:00–07:00 WIB monitor hanya mencatat sinyal tanpa mengirim alert.</li>
-        </ul>
-      </section>
+  <div class="grid2">
+    <!-- ============ ORDER BOOK ============ -->
+    <section class="panel" aria-label="Order book">
+      <div class="panelhead"><div class="left"><h2>Order Book</h2><span class="badge live" id="obBadge">DATA LIVE</span></div><span class="note" id="obSrc">—</span></div>
+      <p class="note" id="obPair" style="margin-top:0">—</p>
+      <div class="ob">
+        <div><h4>ASKS (jual)</h4><div id="obAsks"><p class="note">Memuat…</p></div></div>
+        <div><h4>BIDS (beli)</h4><div id="obBids"><p class="note">Memuat…</p></div></div>
+      </div>
+      <p class="note" id="obSpread"></p>
+    </section>
 
-      <p class="disclaimer">Alat bantu baca arah saja — bukan saran finansial dan bukan sinyal entry. Forecast adalah
-        rentang statistik dari volatilitas masa lalu, bukan janji harga. Sinyal pool baru di bagian Pemantau bersifat sangat spekulatif:
-        token berumur menit bisa saja penipuan atau rug pull, dan tampil di sini bukan berarti sudah diverifikasi aman.
-        Keputusan trading dan risikonya tetap di tanganmu.</p>
-    </main>
+    <!-- ============ HEMISPHERE ============ -->
+    <section class="panel" aria-label="Coin selection score">
+      <div class="panelhead"><div class="left"><h2>Coin Selection — Score Hemisphere</h2><span class="badge live lvb">DATA LIVE</span></div></div>
+      <p class="note" style="margin-top:0">Skor = Bias Momentum live tiap koin di strip. Setengah lingkaran menunjukkan rata-rata skor 10 koin.</p>
+      <div class="hemiwrap">
+        <svg id="hemi" viewBox="0 0 300 170" width="100%" role="img" aria-label="Pengukur setengah lingkaran skor rata-rata"></svg>
+        <div id="hemiList"></div>
+      </div>
+    </section>
+  </div>
 
-    <script>
-      // ---- Market Move LIVE: data ditarik langsung dari Binance Spot public API ----
-      // (data-api.binance.vision, tanpa API key) setiap halaman dibuka, lalu diperbarui
-      // otomatis tiap 60 detik. Bila Binance tidak terjangkau dari jaringan pembaca,
-      // tiap koin dicoba berurutan dari sumber cadangan — Binance US, lalu OKX, lalu
-      // Gate.io — dan candle dari sumber mana pun dinormalisasi dulu ke format
-      // candle Binance yang sama persis sebelum dihitung. Semua metrik dihitung di browser dari candle 1-menit
-      // dengan rumus yang sama seperti versi snapshot: RSI(14) Wilder, EMA20/EMA50,
-      // ATR(14) Wilder, volatilitas terealisasi 1 jam = simpangan baku sampel return
-      // 1-menit x sqrt(60), forecast = harga terakhir +/- volatilitas itu, support /
-      // resistance terdekat dari high/low 1 jam dan kuat dari high/low 6 jam, dan skor
-      // Bias Momentum dari RSI + posisi harga terhadap EMA20/EMA50 + arah EMA + warna
-      // candle + perubahan harga 1 jam.
-      var API = "https://data-api.binance.vision/api/v3/klines";
-      var REFRESH_MS = 60000;
+  <!-- ============ ACTIVITY ============ -->
+  <section class="panel" aria-label="Aktivitas agen">
+    <div class="panelhead"><div class="left"><h2>Agent Activity</h2><span class="badge live lvb">DATA LIVE</span></div><span class="note">Dari hitungan live terakhir — bukan log simulasi</span></div>
+    <div class="feed" id="feed"><p class="note">Menunggu hitungan pertama…</p></div>
+  </section>
 
-      var META = {
-        BTC:  {name:"Bitcoin", pair:"BTC / USDT", pairD:"BTC / USDT", bin:"BTCUSDT", dec:1},
-        ENA:  {name:"Ethena", pair:"ENA / USDT", pairD:"ENA / USDT", bin:"ENAUSDT", dec:4},
-        ONDO: {name:"Ondo Finance", pair:"ONDO / USDT", pairD:"ONDO / USDT", bin:"ONDOUSDT", dec:4},
-        XAU:  {name:"Emas (PAXG)", pair:"PAXG / USDT · wakil XAU", pairD:"PAXG / USDT", bin:"PAXGUSDT", dec:2,
-               note:"Panel XAU ini memakai pair <b>PAXG / USDT</b> — PAXG adalah token emas Paxos yang nilainya mengikuti harga emas — karena Binance Spot <b>tidak menyediakan pair XAU/USDT langsung</b>. Jadi semua angka di panel ini adalah harga PAXG, bukan harga XAU spot."},
-        ETH:  {name:"Ethereum", pair:"ETH / USDT", pairD:"ETH / USDT", bin:"ETHUSDT", dec:2},
-        SHIB: {name:"Shiba Inu", pair:"SHIB / USDT", pairD:"SHIB / USDT", bin:"SHIBUSDT", dec:8},
-        PENGU:{name:"Pudgy Penguins", pair:"PENGU / USDT", pairD:"PENGU / USDT", bin:"PENGUUSDT", dec:5},
-        BNB:  {name:"BNB", pair:"BNB / USDT", pairD:"BNB / USDT", bin:"BNBUSDT", dec:2},
-        SUI:  {name:"Sui", pair:"SUI / USDT", pairD:"SUI / USDT", bin:"SUIUSDT", dec:4},
-        XPL:  {name:"Plasma", pair:"XPL / USDT", pairD:"XPL / USDT", bin:"XPLUSDT", dec:4},
-        PUMP: {name:"Pump.fun", pair:"PUMP / USDT", pairD:"PUMP / USDT", bin:"PUMPUSDT", dec:6},
-        PYTH: {name:"Pyth Network", pair:"PYTH / USDT", pairD:"PYTH / USDT", bin:"PYTHUSDT", dec:5},
-        ZEC:  {name:"Zcash", pair:"ZEC / USDT", pairD:"ZEC / USDT", bin:"ZECUSDT", dec:2},
-        ASTER:{name:"Aster", pair:"ASTER / USDT", pairD:"ASTER / USDT", bin:"ASTERUSDT", dec:4},
-        JUP:  {name:"Jupiter", pair:"JUP / USDT", pairD:"JUP / USDT", bin:"JUPUSDT", dec:4},
-        HYPE: {name:"Hyperliquid", pair:"HYPE / USDT", pairD:"HYPE / USDT", bin:"HYPEUSDT", dec:2},
-        WCT:  {name:"WalletConnect Token", pair:"WCT / USDT", pairD:"WCT / USDT", bin:"WCTUSDT", dec:5},
-        SOMI: {name:"Somnia", pair:"SOMI / USDT", pairD:"SOMI / USDT", bin:"SOMIUSDT", dec:4}
-      };
-      var ORDER = ["BTC", "ENA", "ONDO", "XAU", "ETH", "SHIB", "PENGU", "BNB", "SUI", "XPL", "PUMP", "PYTH", "ZEC", "ASTER", "JUP", "HYPE", "WCT", "SOMI"];
+  <!-- ============ PEMANTAU ============ -->
+  <section class="panel" aria-label="Pemantau crypto live">
+    <div class="panelhead"><div class="left"><h2>Pemantau Crypto Live</h2><span class="badge stale">SNAPSHOT</span></div><span class="note">Snapshot terakhir monitor sinyal 15-menit · 23 Nov 2026, 01:58 WIB · <b>bukan</b> data live dan <b>bukan</b> bocoran listing</span></div>
+    <p class="note">Monitor berjalan terpisah dari halaman ini dan melapor ke chat; yang tampil di sini adalah snapshot terakhirnya (sinyal new-pool-momentum GeckoTerminal di BNB Chain). Kolom yang tidak ada di snapshot ditandai “—” apa adanya, tidak diisi perkiraan.</p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Token / Pasangan</th><th>Alamat Kontrak</th><th>FDV</th><th>Reserve</th><th>Vol 24j</th><th>Buys 1j</th><th>Tautan</th></tr></thead>
+      <tbody>
+        <tr><td><b>GOAT</b> — pasangan tercatat di snapshot tanpa nama pair lengkap</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td><b>蚁巢</b> — pasangan tercatat di snapshot tanpa nama pair lengkap</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Format snapshot penuh dari monitor memuat: nama token/pasangan, alamat kontrak, FDV, reserve, volume 24 jam, buys 1 jam, serta tautan GeckoTerminal dan BscScan untuk verifikasi mandiri. Sinyal pool baru sangat berisiko — selalu cek kontrak dan likuiditas sendiri sebelum bertindak.</p>
+  </section>
 
-      var DATA = {};       // hasil hitung terakhir yang berhasil per koin
-      var FAILED = {};     // pengambilan terakhir koin ini gagal
-      var STALE = {};      // koin punya data lama, tapi pembaruan terakhir gagal
-      var SYM_TIME = {};   // waktu data koin ini berhasil dimuat
-      var lastUpdated = null;
-      var inFlight = false;
-      var nextAt = Date.now() + REFRESH_MS;
+  <footer>Market Move — alat baca arah, bukan saran finansial dan bukan bot trading. Semua angka dihitung di browser dari API publik Binance Spot / Binance US / OKX / Gate.io pada saat halaman dibuka atau diperbarui.</footer>
+</div>
 
-      function fmt(v, dec){
-        return v.toLocaleString("en-US",{minimumFractionDigits:dec, maximumFractionDigits:dec});
+<script>
+"use strict";
+/* ================= CONFIG ================= */
+var COINS = [
+  {s:"BTC", name:"Bitcoin"}, {s:"ETH", name:"Ethereum"}, {s:"BNB", name:"BNB"},
+  {s:"ENA", name:"Ethena"}, {s:"ONDO", name:"Ondo"}, {s:"XAU", name:"Emas (PAXG)", binance:"PAXGUSDT", okx:"PAXG", gate:"PAXG"},
+  {s:"SHIB", name:"Shiba Inu"}, {s:"PENGU", name:"Pudgy Penguins"}, {s:"SUI", name:"Sui"},
+  {s:"XPL", name:"Plasma", noUS:true}, {s:"PUMP", name:"Pump.fun"}, {s:"PYTH", name:"Pyth Network", noUS:true},
+  {s:"ZEC", name:"Zcash"}, {s:"ASTER", name:"Aster"}, {s:"JUP", name:"Jupiter"},
+  {s:"HYPE", name:"Hyperliquid"}, {s:"WCT", name:"WalletConnect", noUS:true}, {s:"SOMI", name:"Somnia", noUS:true, noOKX:true}
+];
+var STRIP = ["BTC","ETH","SOL","XRP","HYPE","ENA","SUI","BNB","ZEC","JUP"];
+var EXTRA = { SOL:{s:"SOL",name:"Solana"}, XRP:{s:"XRP",name:"XRP"} };
+function coinDef(sym){
+  for (var i=0;i<COINS.length;i++) if (COINS[i].s===sym) return COINS[i];
+  if (EXTRA[sym]) return EXTRA[sym];
+  return {s:sym, name:sym};
+}
+function binSym(c){ return c.binance || (c.s+"USDT"); }
+function okxBase(c){ return c.okx || c.s; }
+function gateBase(c){ return c.gate || c.s; }
+
+var state = { selected:"BTC", cache:{}, stripData:{}, lastOk:null, timer:60, loading:false, anySuccess:false, attempted:false };
+function updateBadges(){
+  var txt = state.anySuccess ? "DATA LIVE" : (state.attempted ? "GAGAL DIMUAT" : "MENUNGGU DATA");
+  var cls = state.anySuccess ? "badge live lvb" : (state.attempted ? "badge err lvb" : "badge standby lvb");
+  var els=document.querySelectorAll(".lvb");
+  for (var i=0;i<els.length;i++){ els[i].textContent=txt; els[i].className=cls; }
+}
+
+/* ================= HELPERS ================= */
+function $(id){ return document.getElementById(id); }
+function fmt(n){
+  if (n===null||n===undefined||isNaN(n)) return "—";
+  var a=Math.abs(n), d;
+  if (a>=1000) d=1; else if (a>=100) d=2; else if (a>=1) d=3; else if (a>=0.01) d=5; else if (a>=0.0001) d=7; else d=9;
+  return n.toLocaleString("en-US",{minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function fmtQty(n){
+  if (n===null||n===undefined||isNaN(n)) return "—";
+  if (n>=1e9) return (n/1e9).toFixed(2)+"B";
+  if (n>=1e6) return (n/1e6).toFixed(2)+"M";
+  if (n>=1e3) return (n/1e3).toFixed(2)+"K";
+  return n.toFixed(2);
+}
+function wibTime(d){
+  try{ return d.toLocaleString("id-ID",{timeZone:"Asia/Jakarta",hour:"2-digit",minute:"2-digit",second:"2-digit",day:"2-digit",month:"short"})+" WIB"; }
+  catch(e){ return d.toLocaleString("id-ID")+" WIB"; }
+}
+function wibHM(ts){
+  try{ return new Date(ts).toLocaleTimeString("id-ID",{timeZone:"Asia/Jakarta",hour:"2-digit",minute:"2-digit"}); }
+  catch(e){ return new Date(ts).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}); }
+}
+function fetchJSON(url, timeoutMs){
+  return new Promise(function(resolve,reject){
+    var ctl = ("AbortController" in window) ? new AbortController() : null;
+    var to = setTimeout(function(){ if(ctl) ctl.abort(); reject(new Error("timeout")); }, timeoutMs||12000);
+    fetch(url, ctl?{signal:ctl.signal}:undefined).then(function(r){
+      clearTimeout(to);
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      return r.json();
+    }).then(resolve).catch(function(e){ clearTimeout(to); reject(e); });
+  });
+}
+
+/* ================= DATA LAYER (fallback chain) ================= */
+/* Normalized candle: {t,o,h,l,c,v} oldest first */
+function parseBinance(arr){
+  return arr.map(function(k){ return {t:k[0], o:+k[1], h:+k[2], l:+k[3], c:+k[4], v:+k[5]}; });
+}
+function parseOKX(arr){ /* newest first -> reverse */
+  return arr.slice().reverse().map(function(k){ return {t:+k[0], o:+k[1], h:+k[2], l:+k[3], c:+k[4], v:+k[5]}; });
+}
+function parseGate(arr){ /* [tsSec, vol, close, high, low, open] oldest first */
+  return arr.map(function(k){ return {t:+k[0]*1000, v:+k[1], c:+k[2], h:+k[3], l:+k[4], o:+k[5]}; });
+}
+var SOURCES = [
+  { id:"binance", label:"Binance Spot",
+    ok:function(c){ return true; },
+    m1:function(c){ return fetchJSON("https://data-api.binance.vision/api/v3/klines?symbol="+binSym(c)+"&interval=1m&limit=300").then(parseBinance); },
+    h1:function(c){ return fetchJSON("https://data-api.binance.vision/api/v3/klines?symbol="+binSym(c)+"&interval=1h&limit=120").then(parseBinance); },
+    depth:function(c){ return fetchJSON("https://data-api.binance.vision/api/v3/depth?symbol="+binSym(c)+"&limit=10"); } },
+  { id:"binanceus", label:"Binance US",
+    ok:function(c){ return !c.noUS; },
+    m1:function(c){ return fetchJSON("https://api.binance.us/api/v3/klines?symbol="+binSym(c)+"&interval=1m&limit=300").then(parseBinance); },
+    h1:function(c){ return fetchJSON("https://api.binance.us/api/v3/klines?symbol="+binSym(c)+"&interval=1h&limit=120").then(parseBinance); },
+    depth:function(c){ return fetchJSON("https://api.binance.us/api/v3/depth?symbol="+binSym(c)+"&limit=10"); } },
+  { id:"okx", label:"OKX",
+    ok:function(c){ return !c.noOKX; },
+    m1:function(c){ return fetchJSON("https://www.okx.com/api/v5/market/candles?instId="+okxBase(c)+"-USDT&bar=1m&limit=300").then(function(j){ if(j.code!=="0"||!j.data||!j.data.length) throw new Error("OKX kosong"); return parseOKX(j.data); }); },
+    h1:function(c){ return fetchJSON("https://www.okx.com/api/v5/market/candles?instId="+okxBase(c)+"-USDT&bar=1H&limit=120").then(function(j){ if(j.code!=="0"||!j.data||!j.data.length) throw new Error("OKX kosong"); return parseOKX(j.data); }); },
+    depth:null },
+  { id:"gate", label:"Gate.io",
+    ok:function(c){ return true; },
+    m1:function(c){ return fetchJSON("https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair="+gateBase(c)+"_USDT&interval=1m&limit=300").then(parseGate); },
+    h1:function(c){ return fetchJSON("https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair="+gateBase(c)+"_USDT&interval=1h&limit=120").then(parseGate); },
+    depth:null }
+];
+function fetchCandles(c){
+  /* try sources in order; returns {m1,h1,source} — h1 best-effort */
+  var idx=0;
+  function attempt(){
+    if (idx>=SOURCES.length) return Promise.reject(new Error("Semua sumber gagal"));
+    var src=SOURCES[idx++];
+    if (!src.ok(c)) return attempt();
+    return src.m1(c).then(function(m1){
+      if(!m1||m1.length<60) throw new Error("data kurang");
+      return src.h1(c).then(function(h1){ return {m1:m1,h1:h1,source:src.label}; })
+        .catch(function(){ return {m1:m1,h1:null,source:src.label}; });
+    }).catch(function(){ return attempt(); });
+  }
+  return attempt();
+}
+function fetchDepth(c){
+  return SOURCES[0].depth(c).then(function(d){ return {d:d, source:"Binance Spot"}; })
+    .catch(function(){ return SOURCES[1].depth(c).then(function(d){ return {d:d, source:"Binance US"}; }); });
+}
+
+/* ================= INDICATORS ================= */
+function emaSeries(vals, p){
+  var k=2/(p+1), out=[], e=null;
+  for (var i=0;i<vals.length;i++){ e = (e===null)? vals[i] : vals[i]*k + e*(1-k); out.push(e); }
+  return out;
+}
+function rsiWilder(closes, p){
+  p=p||14;
+  if (closes.length<=p) return null;
+  var g=0,l=0,i;
+  for (i=1;i<=p;i++){ var d=closes[i]-closes[i-1]; if(d>0)g+=d; else l-=d; }
+  g/=p; l/=p;
+  for (i=p+1;i<closes.length;i++){ var dd=closes[i]-closes[i-1]; g=(g*(p-1)+(dd>0?dd:0))/p; l=(l*(p-1)+(dd<0?-dd:0))/p; }
+  if (l===0) return 100;
+  return 100 - 100/(1+g/l);
+}
+function atrWilder(cs, p){
+  p=p||14;
+  if (cs.length<=p) return null;
+  var trs=[], i;
+  for (i=1;i<cs.length;i++){
+    var h=cs[i].h, lo=cs[i].l, pc=cs[i-1].c;
+    trs.push(Math.max(h-lo, Math.abs(h-pc), Math.abs(lo-pc)));
+  }
+  var a=0; for (i=0;i<p;i++) a+=trs[i]; a/=p;
+  for (i=p;i<trs.length;i++) a=(a*(p-1)+trs[i])/p;
+  return a;
+}
+function biasScore(m){
+  /* 0..100 from RSI, EMA trend, 1h momentum */
+  var score=50;
+  if (m.rsi!==null) score += (m.rsi-50)*0.55;
+  if (m.ema20!==null && m.ema50!==null && m.ema50!==0) score += Math.max(-14, Math.min(14, (m.ema20-m.ema50)/m.ema50*2200));
+  if (m.price && m.ema20) score += (m.price>m.ema20)? 6 : -6;
+  score += Math.max(-12, Math.min(12, m.chg1h*1.6));
+  return Math.max(2, Math.min(98, Math.round(score)));
+}
+function computeMetrics(m1, h1){
+  var closes=m1.map(function(x){return x.c;});
+  var price=closes[closes.length-1];
+  var e20=emaSeries(closes,20), e50=emaSeries(closes,50);
+  var last60=m1.slice(-60);
+  var s1=Math.min.apply(null,last60.map(function(x){return x.l;}));
+  var r1=Math.max.apply(null,last60.map(function(x){return x.h;}));
+  var s6,r6;
+  if (h1 && h1.length>=6){ var l6=h1.slice(-6); s6=Math.min.apply(null,l6.map(function(x){return x.l;})); r6=Math.max.apply(null,l6.map(function(x){return x.h;})); }
+  else { var l360=m1.slice(-360); s6=Math.min.apply(null,l360.map(function(x){return x.l;})); r6=Math.max.apply(null,l360.map(function(x){return x.h;})); }
+  var atr=atrWilder(m1,14);
+  /* volatility 1h: stdev of 1m returns over last 60, in % */
+  var rets=[]; for (var i=m1.length-60;i<m1.length;i++){ if(i>0) rets.push((closes[i]-closes[i-1])/closes[i-1]*100); }
+  var mean=rets.reduce(function(a,b){return a+b;},0)/rets.length;
+  var vol=Math.sqrt(rets.reduce(function(a,b){return a+(b-mean)*(b-mean);},0)/rets.length);
+  var open1h = m1.length>60 ? m1[m1.length-61].c : m1[0].c;
+  var chg1h=(price-open1h)/open1h*100;
+  var volQ=last60.reduce(function(a,x){return a+x.v*x.c;},0);
+  var fcRange = atr!==null ? atr*Math.sqrt(60)*0.9 : price*0.01;
+  var m={ price:price, rsi:rsiWilder(closes,14), ema20:e20[e20.length-1], ema50:e50[e50.length-1],
+    atr:atr, vol1h:vol, chg1h:chg1h, volQuote:volQ, s1:s1, r1:r1, s6:s6, r6:r6,
+    fcHigh:price+fcRange, fcLow:price-fcRange,
+    fsIdx:Math.max(0,m1.length-61), fsPrice: m1.length>60? m1[m1.length-61].c : m1[0].c };
+  m.bias=biasScore(m);
+  return m;
+}
+
+/* ================= PATTERNS ================= */
+function body(c){ return Math.abs(c.c-c.o); }
+function range(c){ return c.h-c.l; }
+function upper(c){ return c.h-Math.max(c.o,c.c); }
+function lower(c){ return Math.min(c.o,c.c)-c.l; }
+function isBull(c){ return c.c>c.o; }
+function detectPatterns(cs){
+  var out=[], n=cs.length;
+  function add(name,dir,idx){ out.push({name:name,dir:dir,idx:idx,t:cs[idx].t}); }
+  if (n<3) return out;
+  var i, a,b,c;
+  /* single-candle, scan last 30 */
+  for (i=Math.max(1,n-30); i<n; i++){
+    c=cs[i]; var bd=body(c), rg=range(c); if (rg===0) continue;
+    var up=upper(c), lo=lower(c);
+    if (bd<=rg*0.1){
+      if (lo>=rg*0.6 && up<=rg*0.1) add("Doji Dragonfly","Bullish",i);
+      else if (up>=rg*0.6 && lo<=rg*0.1) add("Doji Gravestone","Bearish",i);
+      else add("Doji","Netral",i);
+    } else if (lo>=bd*2 && up<=bd*0.6 && bd>rg*0.25){
+      add(isBull(c)?"Hammer":"Hammer","Bullish",i);
+    } else if (up>=bd*2 && lo<=bd*0.6 && bd>rg*0.25){
+      add(isBull(c)?"Inverted Hammer":"Shooting Star", isBull(c)?"Bullish":"Bearish", i);
+    }
+  }
+  /* context singles at local extremes (last 10) */
+  for (i=Math.max(4,n-10); i<n; i++){
+    c=cs[i]; var bd2=body(c), rg2=range(c); if (rg2===0||bd2<=rg2*0.1) continue;
+    var win=cs.slice(i-4,i), hi=Math.max.apply(null,win.map(function(x){return x.h;})), loW=Math.min.apply(null,win.map(function(x){return x.l;}));
+    if (lower(c)>=bd2*2 && upper(c)<=bd2*0.6 && c.l<=loW*1.001) add("Hammer (di support lokal)","Bullish",i);
+    if (upper(c)>=bd2*2 && lower(c)<=bd2*0.6 && c.h>=hi*0.999) add("Shooting Star (di resistance lokal)","Bearish",i);
+    if (lower(c)>=bd2*1.5 && c.l<=loW*1.001) add("Hanging Man","Bearish",i);
+  }
+  /* two-candle */
+  for (i=Math.max(1,n-30); i<n; i++){
+    a=cs[i-1]; b=cs[i];
+    if (!isBull(a)&&isBull(b) && b.o<=a.c && b.c>=a.o && body(b)>body(a)) add("Bullish Engulfing","Bullish",i);
+    if (isBull(a)&&!isBull(b) && b.o>=a.c && b.c<=a.o && body(b)>body(a)) add("Bearish Engulfing","Bearish",i);
+    if (!isBull(a)&&isBull(b) && b.o<a.l && b.c>a.o-(a.o-a.c)*0.5 && b.c<a.o) add("Piercing Line","Bullish",i);
+    if (isBull(a)&&!isBull(b) && b.o>a.h && b.c<a.o+(a.c-a.o)*0.5 && b.c>a.o) add("Dark Cloud Cover","Bearish",i);
+    if (!isBull(a)&&isBull(b) && b.o>a.l && b.c<a.h && body(b)<body(a)) add("Harami Bullish","Bullish",i);
+    if (isBull(a)&&!isBull(b) && b.o<a.h && b.c>a.l && body(b)<body(a)) add("Harami Bearish","Bearish",i);
+  }
+  /* three-candle */
+  for (i=Math.max(2,n-30); i<n; i++){
+    a=cs[i-2]; b=cs[i-1]; c=cs[i];
+    if (!isBull(a)&&body(a)>range(a)*0.5 && body(b)<body(a)*0.4 && isBull(c) && c.c>a.o-(a.o-a.c)*0.5) add("Morning Star","Bullish",i);
+    if (isBull(a)&&body(a)>range(a)*0.5 && body(b)<body(a)*0.4 && !isBull(c) && c.c<a.o+(a.c-a.o)*0.5) add("Evening Star","Bearish",i);
+    if (isBull(a)&&isBull(b)&&isBull(c) && b.c>a.c && c.c>b.c && body(a)>0&&body(b)>0&&body(c)>0) add("Three White Soldiers","Bullish",i);
+    if (!isBull(a)&&!isBull(b)&&!isBull(c) && b.c<a.c && c.c<b.c && body(a)>0&&body(b)>0&&body(c)>0) add("Three Black Crows","Bearish",i);
+  }
+  /* dedupe by name+idx, keep last 8 */
+  var seen={}, res=[];
+  for (i=out.length-1;i>=0;i--){ var k=out[i].name+"@"+out[i].idx; if(!seen[k]){ seen[k]=1; res.unshift(out[i]); } }
+  return res.slice(-8);
+}
+
+/* ================= CHART ================= */
+function drawMainChart(m1, m, patterns){
+  var cv=$("mainChart"), ctx=cv.getContext("2d");
+  var W=cv.width, H=cv.height, padR=86, padL=8, padT=12, padB=24;
+  ctx.clearRect(0,0,W,H);
+  var show=m1.slice(-110);
+  var off=m1.length-show.length;
+  var allHi=Math.max(m.r1, m.fcHigh), allLo=Math.min(m.s1, m.fcLow);
+  show.forEach(function(x){ allHi=Math.max(allHi,x.h); allLo=Math.min(allLo,x.l); });
+  var span=(allHi-allLo)||1; allHi+=span*0.06; allLo-=span*0.06; span=allHi-allLo;
+  var cw=(W-padL-padR)/(show.length+60);
+  function X(i){ return padL + i*cw + cw/2; }
+  function Y(p){ return padT + (allHi-p)/span*(H-padT-padB); }
+  /* grid */
+  ctx.strokeStyle="rgba(34,211,238,.08)"; ctx.fillStyle="#5f8299"; ctx.font="10px sans-serif"; ctx.lineWidth=1;
+  for (var g=0; g<=4; g++){ var p=allLo+span*g/4, y=Y(p); ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke(); ctx.fillText(fmt(p), W-padR+6, y+3); }
+  /* fan from forecast start */
+  var fsLocal=m.fsIdx-off;
+  if (fsLocal<0) fsLocal=0;
+  var fx=X(fsLocal), fy=Y(m.fsPrice), endX=X(show.length+59);
+  ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(endX,Y(m.fcHigh)); ctx.lineTo(endX,Y(m.fcLow)); ctx.closePath();
+  var grad=ctx.createLinearGradient(fx,0,endX,0);
+  grad.addColorStop(0,"rgba(34,211,238,.05)"); grad.addColorStop(1,"rgba(34,211,238,.20)");
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.strokeStyle="rgba(52,211,153,.7)"; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(endX,Y(m.fcHigh)); ctx.stroke();
+  ctx.strokeStyle="rgba(251,77,109,.7)";
+  ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(endX,Y(m.fcLow)); ctx.stroke();
+  ctx.setLineDash([]);
+  /* S/R lines */
+  ctx.strokeStyle="rgba(52,211,153,.55)"; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(padL,Y(m.s1)); ctx.lineTo(W-padR,Y(m.s1)); ctx.stroke();
+  ctx.strokeStyle="rgba(251,77,109,.55)";
+  ctx.beginPath(); ctx.moveTo(padL,Y(m.r1)); ctx.lineTo(W-padR,Y(m.r1)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="#34d399"; ctx.fillText("Support", padL+4, Y(m.s1)-4);
+  ctx.fillStyle="#fb4d6d"; ctx.fillText("Resistance", padL+4, Y(m.r1)-4);
+  /* forecast start marker */
+  ctx.strokeStyle="rgba(230,244,251,.5)"; ctx.setLineDash([3,4]);
+  ctx.beginPath(); ctx.moveTo(fx,padT); ctx.lineTo(fx,H-padB); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle="#e6f4fb"; ctx.beginPath(); ctx.arc(fx,fy,3.5,0,7); ctx.fill();
+  ctx.fillText("Forecast Start", Math.min(fx+5,W-padR-70), padT+10);
+  /* candles */
+  for (var i=0;i<show.length;i++){
+    var c=show[i], up=c.c>=c.o, col=up?"#34d399":"#fb4d6d", x=X(i);
+    ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x,Y(c.h)); ctx.lineTo(x,Y(c.l)); ctx.stroke();
+    var bw=Math.max(2,cw*0.62), yO=Y(c.o), yC=Y(c.c);
+    ctx.fillRect(x-bw/2, Math.min(yO,yC), bw, Math.max(1.4,Math.abs(yC-yO)));
+  }
+  /* last price dashed */
+  var ly=Y(m.price);
+  ctx.strokeStyle="rgba(230,244,251,.65)"; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(X(show.length-1),ly); ctx.lineTo(endX,ly); ctx.stroke(); ctx.setLineDash([]);
+  /* fan end labels */
+  ctx.fillStyle="#34d399"; ctx.font="bold 10px sans-serif";
+  ctx.fillText("High "+fmt(m.fcHigh), endX+4, Y(m.fcHigh)+3);
+  ctx.fillStyle="#fb4d6d"; ctx.fillText("Low "+fmt(m.fcLow), endX+4, Y(m.fcLow)+3);
+  ctx.fillStyle="#e6f4fb"; ctx.fillText("Last "+fmt(m.price), endX+4, ly+3);
+  /* pattern markers */
+  ctx.font="bold 11px sans-serif";
+  patterns.forEach(function(p){
+    var li=p.idx-off; if (li<0||li>=show.length) return;
+    var c=show[li], x=X(li);
+    if (p.dir==="Bullish"){ ctx.fillStyle="#34d399"; ctx.fillText("▲", x-5, Y(c.l)+16); }
+    else if (p.dir==="Bearish"){ ctx.fillStyle="#fb4d6d"; ctx.fillText("▼", x-5, Y(c.h)-6); }
+    else { ctx.fillStyle="#fbbf24"; ctx.fillText("◆", x-5, Y(c.h)-6); }
+  });
+  /* time axis */
+  ctx.fillStyle="#5f8299"; ctx.font="10px sans-serif";
+  if (show.length){ ctx.fillText(wibHM(show[0].t), padL, H-8); var mid=show[Math.floor(show.length/2)]; ctx.fillText(wibHM(mid.t), X(Math.floor(show.length/2))-14, H-8); ctx.fillText("+1 jam (Forecast)", endX-72, H-8); }
+}
+function drawMini(cv, m1){
+  var ctx=cv.getContext("2d"), W=cv.width, H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  var show=m1.slice(-60);
+  var hi=Math.max.apply(null,show.map(function(x){return x.h;})), lo=Math.min.apply(null,show.map(function(x){return x.l;}));
+  var span=(hi-lo)||1; hi+=span*0.08; lo-=span*0.08; span=hi-lo;
+  var cw=W/show.length;
+  show.forEach(function(c,i){
+    var up=c.c>=c.o, col=up?"#34d399":"#fb4d6d", x=i*cw+cw/2;
+    var yH=(hi-c.h)/span*H, yL=(hi-c.l)/span*H, yO=(hi-c.o)/span*H, yC=(hi-c.c)/span*H;
+    ctx.strokeStyle=col; ctx.fillStyle=col;
+    ctx.beginPath(); ctx.moveTo(x,yH); ctx.lineTo(x,yL); ctx.stroke();
+    ctx.fillRect(x-Math.max(1,cw*0.3), Math.min(yO,yC), Math.max(1.6,cw*0.6), Math.max(1,Math.abs(yC-yO)));
+  });
+}
+
+/* ================= AGENTS ================= */
+var AGENTS=[
+  {n:"Trend Scout", task:"Tren EMA20/50 + arah bias", src:"live"},
+  {n:"Whale Watch", task:"Arus dompet besar (tidak ada feed terhubung)", src:"visual"},
+  {n:"Volume Flow", task:"Volume & nilai transaksi 1 jam", src:"live"},
+  {n:"Coin Picker", task:"Peringkat Bias Momentum 10 koin strip", src:"live"},
+  {n:"Risk Gate", task:"Volatilitas & ATR sebagai rem risiko", src:"live"},
+  {n:"Sentiment Pulse", task:"Sentimen sosial (tidak ada feed terhubung)", src:"visual"},
+  {n:"Liquidity Map", task:"Spread & kedalaman order book", src:"live"},
+  {n:"News Wire", task:"Berita eksternal (tidak ada feed terhubung)", src:"visual"},
+  {n:"Order Exec", task:"Eksekusi order — halaman ini tidak bertransaksi", src:"standby"},
+  {n:"Hedge Guard", task:"Lindung nilai (tidak ada feed terhubung)", src:"visual"},
+  {n:"Pattern Eye", task:"Deteksi pola candlestick klasik", src:"live"},
+  {n:"Exit Pilot", task:"Jarak harga ke support/resistance", src:"live"}
+];
+function renderAgents(statusMap){
+  var html="", rows="";
+  AGENTS.forEach(function(a){
+    var hasReal = !!statusMap[a.n];
+    var badge;
+    if (a.src==="visual") badge='<span class="badge visual">VISUAL</span>';
+    else if (a.src==="standby") badge='<span class="badge standby">STANDBY</span>';
+    else if (hasReal) badge='<span class="badge live">DATA LIVE</span>';
+    else if (state.attempted) badge='<span class="badge err">GAGAL DIMUAT</span>';
+    else badge='<span class="badge standby">MENUNGGU DATA</span>';
+    var st = statusMap[a.n] || (a.src==="live" ? (state.attempted ? "Data gagal dimuat dari semua sumber" : "Menunggu data…") : (a.src==="visual" ? "Kerangka visual saja" : "Standby — tidak ada eksekusi"));
+    html+='<div class="agent"><div class="an">'+a.n+'</div><div style="margin:4px 0">'+badge+'</div><div class="as">'+st+'</div></div>';
+    rows+='<tr><td><b>'+a.n+'</b></td><td>'+a.task+'</td><td>'+st+'</td><td>'+badge+'</td></tr>';
+  });
+  $("agents").innerHTML=html; $("roster").innerHTML=rows;
+}
+
+/* ================= RENDER DETAIL ================= */
+function renderDetail(sym){
+  var rec=state.cache[sym];
+  var def=coinDef(sym);
+  $("detailTitle").textContent="Detail — "+sym+"/USDT · "+def.name;
+  if (!rec){ return; }
+  if (rec.error){
+    $("coinError").classList.remove("hidden");
+    $("coinError").innerHTML="<b>Gagal memuat "+sym+".</b> Semua sumber dicoba (Binance Spot → Binance US → OKX → Gate.io) dan tidak ada yang menjawab. Koin lain tetap dimuat terpisah. <button class='btn' style='margin-left:8px' onclick='refreshAll()'>Coba lagi</button>";
+    $("longBar").style.width="0%"; $("shortBar").style.width="0%";
+    $("patterns").innerHTML='<div class="pat"><span class="name">Pola tidak tersedia — data gagal dimuat</span><span class="tag-net">—</span></div>';
+    $("drivers").innerHTML="";
+    return;
+  }
+  $("coinError").classList.add("hidden");
+  var m=rec.m, m1=rec.m1;
+  $("detailSrc").textContent="Sumber: "+rec.source+" · candle 1 menit × "+m1.length;
+  $("longPct").textContent=m.bias+"%"; $("shortPct").textContent=(100-m.bias)+"%";
+  $("longBar").style.width=m.bias+"%"; $("shortBar").style.width=(100-m.bias)+"%";
+  $("lastPrice").textContent=fmt(m.price);
+  $("forecastStartInfo").textContent="Forecast Start: "+fmt(m.fsPrice)+" · "+wibHM(m1[m.fsIdx].t)+" WIB · harga terakhir "+wibHM(m1[m1.length-1].t)+" WIB";
+  $("fcHigh").textContent=fmt(m.fcHigh); $("fcLow").textContent=fmt(m.fcLow);
+  $("mRsi").textContent=m.rsi===null?"—":m.rsi.toFixed(1);
+  $("mRsiD").textContent=m.rsi===null?"":(m.rsi>=70?"Overbought — rawan koreksi":m.rsi<=30?"Oversold — rawan pantulan":"Zona netral");
+  $("mEma").textContent=fmt(m.ema20)+" / "+fmt(m.ema50);
+  $("mEmaD").textContent=m.ema20>m.ema50?"EMA20 di atas EMA50 — tren pendek naik":"EMA20 di bawah EMA50 — tren pendek turun";
+  $("mAtr").textContent=fmt(m.atr)+" · "+m.vol1h.toFixed(3)+"%";
+  $("mVol").textContent="ATR14 (1 mnt) & simpangan return 1 jam";
+  $("sr1s").textContent=fmt(m.s1); $("sr1r").textContent=fmt(m.r1);
+  $("sr6s").textContent=fmt(m.s6); $("sr6r").textContent=fmt(m.r6);
+  $("mChg").innerHTML='<span class="'+(m.chg1h>=0?"up":"down")+'">'+(m.chg1h>=0?"+":"")+m.chg1h.toFixed(2)+'%</span>';
+  $("mVolQ").textContent="Volume 1 jam ≈ $"+fmtQty(m.volQuote);
+  $("chartNote").textContent="Kipas dihitung dari ATR — makin lebar kipas, makin liar gerak 1 jam terakhir.";
+  drawMainChart(m1, m, rec.patterns);
+  /* patterns */
+  if (!rec.patterns.length){
+    $("patterns").innerHTML='<div class="pat"><span class="name">Tidak ada pola</span><span class="tag-net">Netral</span></div><p class="note">Tidak ada pola candlestick klasik yang terdeteksi pada 30 candle terakhir.</p>';
+  } else {
+    $("patterns").innerHTML=rec.patterns.map(function(p){
+      var cls=p.dir==="Bullish"?"tag-bull":(p.dir==="Bearish"?"tag-bear":"tag-net");
+      return '<div class="pat"><span><span class="name">'+p.name+'</span><br><span class="when">'+wibHM(p.t)+' WIB · ditandai di chart</span></span><span class="'+cls+'">'+p.dir+'</span></div>';
+    }).join("");
+  }
+  /* key drivers */
+  var d=[];
+  d.push((m.ema20>m.ema50?"Tren pendek naik: ":"Tren pendek turun: ")+"EMA20 "+(m.ema20>m.ema50?"di atas":"di bawah")+" EMA50.");
+  d.push("RSI 14 di "+(m.rsi===null?"—":m.rsi.toFixed(1))+" — "+(m.rsi>=70?"tekanan beli jenuh (overbought)":m.rsi<=30?"tekanan jual jenuh (oversold)":"belum jenuh di kedua sisi")+".");
+  d.push("Harga berubah "+(m.chg1h>=0?"+":"")+m.chg1h.toFixed(2)+"% dalam 1 jam dengan volume ≈ $"+fmtQty(m.volQuote)+".");
+  d.push("Volatilitas 1 jam "+m.vol1h.toFixed(3)+"%/menit — rentang forecast "+fmt(m.fcLow)+" – "+fmt(m.fcHigh)+" (ATR).");
+  var dSup=((m.price-m.s1)/m.price*100), dRes=((m.r1-m.price)/m.price*100);
+  d.push("Jarak ke support 1 jam "+dSup.toFixed(2)+"%, ke resistance 1 jam "+dRes.toFixed(2)+"% — sisi yang lebih dekat biasanya diuji duluan.");
+  if (rec.patterns.length) d.push("Pola terakhir: "+rec.patterns[rec.patterns.length-1].name+" ("+rec.patterns[rec.patterns.length-1].dir+").");
+  $("drivers").innerHTML=d.map(function(x){return "<li>"+x+"</li>";}).join("");
+}
+
+/* ================= STRIP + HEMISPHERE + FEED ================= */
+function renderStrip(){
+  var wrap=$("strip"); wrap.innerHTML="";
+  STRIP.forEach(function(sym){
+    var rec=state.stripData[sym];
+    var b=document.createElement("button"); b.type="button"; b.className="mini";
+    b.setAttribute("aria-label","Buka detail "+sym);
+    if (!rec || rec.error){
+      b.innerHTML='<span class="sym">'+sym+'</span> <span class="pair">/USDT</span><div class="price">—</div><p class="note" style="margin:4px 0">'+(rec&&rec.error?"Gagal dimuat dari semua sumber":"Memuat…")+'</p>';
+    } else {
+      var m=rec.m;
+      b.innerHTML='<span class="sym">'+sym+'</span> <span class="pair">/USDT · '+rec.source+'</span>'+
+        '<div class="price">'+fmt(m.price)+'</div>'+
+        '<canvas width="360" height="52"></canvas>'+
+        '<div class="row"><span class="'+(m.chg1h>=0?"up":"down")+'">'+(m.chg1h>=0?"+":"")+m.chg1h.toFixed(2)+'% · 1 jam</span><span class="biaspill">Bias '+m.bias+'</span></div>'+
+        '<div class="row"><span style="color:var(--mut)">Vol 1j $'+fmtQty(m.volQuote)+'</span><span style="color:var(--mut)">'+(m.bias>=55?"Condong naik":m.bias<=45?"Condong turun":"Netral")+'</span></div>';
+      var cv=b.querySelector("canvas"); if (cv) drawMini(cv, rec.m1);
+    }
+    b.addEventListener("click", function(){
+      if (EXTRA[sym]){ /* SOL/XRP not in dropdown: add temporarily */
+        var sel=$("coinSelect");
+        var exists=false; for (var i=0;i<sel.options.length;i++) if (sel.options[i].value===sym) exists=true;
+        if (!exists){ var o=document.createElement("option"); o.value=sym; o.textContent=sym+" — "+coinDef(sym).name+" (dari strip)"; sel.appendChild(o); }
       }
-      function pct(v){ return (v>=0?"+":"") + v.toFixed(2) + "%"; }
-      function dist(price, level){ var d=(level-price)/price*100; return (d>=0?"+":"") + d.toFixed(2) + "% dari harga sekarang"; }
-      function tlabel(ms){
-        var d=new Date(ms);
-        function p(n){return (n<10?"0":"")+n;}
-        return p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes());
-      }
-      function fmtWIB(dt){
-        try{
-          var parts=new Intl.DateTimeFormat("id-ID",{timeZone:"Asia/Jakarta",weekday:"long",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).formatToParts(dt);
-          var m={}; parts.forEach(function(p){ m[p.type]=p.value; });
-          return m.weekday+", "+m.day+" "+m.month+" "+m.year+" · "+m.hour+":"+m.minute+":"+m.second+" WIB";
-        }catch(e){
-          return dt.toLocaleString("id-ID");
-        }
-      }
-      function fmtVolID(v){
-        function idn(x,dc){ return x.toFixed(dc).replace(".",","); }
-        if(v>=1e9) return "$"+idn(v/1e9,2)+" M";
-        if(v>=1e6) return "$"+idn(v/1e6,2)+" jt";
-        if(v>=1e3) return "$"+idn(v/1e3,1)+" rb";
-        return "$"+idn(v,0);
-      }
+      $("coinSelect").value=sym; state.selected=sym;
+      if (state.stripData[sym] && !state.stripData[sym].error){ state.cache[sym]=state.stripData[sym]; }
+      renderDetail(sym); loadDetailExtras(sym);
+      window.scrollTo({top: document.querySelector('[aria-label="Detail koin"]').offsetTop-8, behavior:"smooth"});
+    });
+    wrap.appendChild(b);
+  });
+}
+function renderHemisphere(){
+  var rows=[], scores=[];
+  STRIP.forEach(function(sym){
+    var rec=state.stripData[sym];
+    if (rec && !rec.error){ scores.push(rec.m.bias); rows.push({sym:sym, bias:rec.m.bias}); }
+  });
+  $("hemiList").innerHTML=rows.length? rows.map(function(r){
+    return '<div class="scorerow"><span><b>'+r.sym+'</b></span><span class="scorebar"><div style="width:'+r.bias+'%"></div></span><span>'+r.bias+'</span></div>';
+  }).join("") : '<p class="note">Menunggu data strip…</p>';
+  var has=scores.length>0;
+  var avg=has? scores.reduce(function(a,b){return a+b;},0)/scores.length : 0;
+  var cx=150, cy=150, r=105;
+  var needle="";
+  if (has){
+    var angle=Math.PI - (avg/100)*Math.PI;
+    var ex=cx+Math.cos(angle)*r, ey=cy-Math.sin(angle)*r;
+    needle='<line x1="'+cx+'" y1="'+cy+'" x2="'+ex+'" y2="'+ey+'" stroke="#22d3ee" stroke-width="3.5"/>'+
+    '<circle cx="'+cx+'" cy="'+cy+'" r="6" fill="#22d3ee"/>';
+  } else {
+    needle='<circle cx="'+cx+'" cy="'+cy+'" r="6" fill="#5f8299"/>';
+  }
+  $("hemi").innerHTML=
+    '<path d="M 30 150 A 120 120 0 0 1 150 30" fill="none" stroke="#fb4d6d" stroke-width="16" opacity="'+(has?0.35:0.15)+'"/>'+
+    '<path d="M 150 30 A 120 120 0 0 1 270 150" fill="none" stroke="#34d399" stroke-width="16" opacity="'+(has?0.35:0.15)+'"/>'+
+    needle+
+    '<text x="34" y="168" fill="#8fb3c7" font-size="11">0 · Turun</text>'+
+    '<text x="132" y="22" fill="#8fb3c7" font-size="11">50</text>'+
+    '<text x="228" y="168" fill="#8fb3c7" font-size="11">100 · Naik</text>'+
+    '<text x="150" y="140" fill="#e6f4fb" font-size="20" font-weight="bold" text-anchor="middle">'+(has?avg.toFixed(0):"—")+'</text>';
+}
+function renderFeed(){
+  var items=[];
+  var sel=state.cache[state.selected];
+  var now=new Date();
+  if (sel && !sel.error){
+    var m=sel.m;
+    items.push({a:"Trend Scout", t:"EMA20 "+(m.ema20>m.ema50?"di atas":"di bawah")+" EMA50 pada "+state.selected+" — bias "+m.bias+"."});
+    items.push({a:"Pattern Eye", t: sel.patterns.length? sel.patterns.length+" pola terdeteksi pada "+state.selected+"; terakhir "+sel.patterns[sel.patterns.length-1].name+" ("+sel.patterns[sel.patterns.length-1].dir+")." : "Tidak ada pola pada "+state.selected+" dalam 30 candle terakhir."});
+    items.push({a:"Volume Flow", t:"Volume 1 jam "+state.selected+" ≈ $"+fmtQty(m.volQuote)+", perubahan "+(m.chg1h>=0?"+":"")+m.chg1h.toFixed(2)+"%."});
+    items.push({a:"Risk Gate", t:"Volatilitas "+m.vol1h.toFixed(3)+"%/mnt, ATR "+fmt(m.atr)+" — rentang forecast "+fmt(m.fcLow)+"–"+fmt(m.fcHigh)+"."});
+    items.push({a:"Exit Pilot", t:"Support 1 jam "+fmt(m.s1)+" · Resistance 1 jam "+fmt(m.r1)+" untuk "+state.selected+"." });
+  }
+  var best=null;
+  STRIP.forEach(function(sym){ var r=state.stripData[sym]; if (r&&!r.error&&(!best||r.m.bias>best.bias)) best={sym:sym,bias:r.m.bias}; });
+  if (best) items.unshift({a:"Coin Picker", t:"Bias tertinggi di strip: "+best.sym+" ("+best.bias+") dari hitungan terakhir."});
+  if (state.obInfo) items.push({a:"Liquidity Map", t:state.obInfo});
+  items.push({a:"Order Exec", t:"Standby — tidak ada order dieksekusi oleh halaman ini."});
+  $("feed").innerHTML=items.length? items.map(function(x){
+    return '<div class="item"><b>'+x.a+'</b> — '+x.t+'<br><span class="t">'+wibTime(now)+'</span></div>';
+  }).join("") : '<p class="note">Menunggu hitungan pertama…</p>';
+  var status={};
+  items.forEach(function(x){ if(!status[x.a]) status[x.a]=x.t; });
+  status["Whale Watch"]="VISUAL — tidak ada feed whale terhubung";
+  status["Sentiment Pulse"]="VISUAL — tidak ada feed sentimen terhubung";
+  status["News Wire"]="VISUAL — tidak ada feed berita terhubung";
+  status["Hedge Guard"]="VISUAL — tidak ada feed lindung nilai terhubung";
+  status["Order Exec"]="Standby — tidak ada eksekusi";
+  renderAgents(status);
+}
 
-      // ---------- indikator (rumus sama seperti versi snapshot) ----------
-      function emaLast(closes, n){
-        var k=2/(n+1), e=closes[0], i;
-        for(i=1;i<closes.length;i++) e=closes[i]*k+e*(1-k);
-        return e;
-      }
-      function rsiWilder(closes, n){
-        n=n||14; var g=0, l=0, i, ch;
-        for(i=1;i<=n;i++){ ch=closes[i]-closes[i-1]; if(ch>0) g+=ch; else l-=ch; }
-        g/=n; l/=n;
-        for(i=n+1;i<closes.length;i++){ ch=closes[i]-closes[i-1]; g=(g*(n-1)+(ch>0?ch:0))/n; l=(l*(n-1)+(ch<0?-ch:0))/n; }
-        if(l===0) return 100;
-        return 100-100/(1+g/l);
-      }
-      function atrWilder(candles, n){
-        n=n||14; var trs=[], i;
-        for(i=1;i<candles.length;i++){
-          var h=candles[i][2], lo=candles[i][3], pc=candles[i-1][4];
-          trs.push(Math.max(h-lo, Math.abs(h-pc), Math.abs(lo-pc)));
-        }
-        var a=0; for(i=0;i<n;i++) a+=trs[i]; a/=n;
-        for(i=n;i<trs.length;i++) a=(a*(n-1)+trs[i])/n;
-        return a;
-      }
+/* ================= ORDER BOOK ================= */
+function loadOrderBook(sym){
+  var c=coinDef(sym);
+  $("obPair").textContent=sym+"/USDT · kedalaman 10 level · sumber cadangan Binance US bila Binance Spot gagal";
+  fetchDepth(c).then(function(res){
+    var d=res.d;
+    var obb=$("obBadge"); if(obb){ obb.textContent="DATA LIVE"; obb.className="badge live"; }
+    $("obSrc").textContent="Sumber: "+res.source;
+    function rows(list, cls){
+      return list.map(function(x){ return '<div class="obrow '+cls+'"><span>'+fmt(+x[0])+'</span><span>'+fmtQty(+x[1])+'</span></div>'; }).join("");
+    }
+    $("obAsks").innerHTML=rows(d.asks.slice().reverse(),"ask");
+    $("obBids").innerHTML=rows(d.bids,"bid");
+    var bestAsk=+d.asks[0][0], bestBid=+d.bids[0][0];
+    var spread=(bestAsk-bestBid)/bestAsk*100;
+    $("obSpread").textContent="Best bid "+fmt(bestBid)+" · Best ask "+fmt(bestAsk)+" · Spread "+spread.toFixed(3)+"%";
+    state.obInfo="Spread "+sym+" "+spread.toFixed(3)+"% (bid "+fmt(bestBid)+" / ask "+fmt(bestAsk)+") via "+res.source+".";
+    renderFeed();
+  }).catch(function(){
+    var obb=$("obBadge"); if(obb){ obb.textContent="GAGAL DIMUAT"; obb.className="badge err"; }
+    $("obAsks").innerHTML='<p class="note">Order book gagal dimuat dari Binance Spot & Binance US.</p>';
+    $("obBids").innerHTML=""; $("obSpread").textContent="";
+  });
+}
+function loadDetailExtras(sym){
+  if (!state.cache[sym]) {
+    var c=coinDef(sym);
+    fetchCandles(c).then(function(res){
+      var m=computeMetrics(res.m1,res.h1);
+      state.anySuccess=true; state.attempted=true; state.lastOk=new Date(); $("lastUpdated").textContent=wibTime(state.lastOk); updateBadges();
+      state.cache[sym]={m1:res.m1,h1:res.h1,m:m,patterns:detectPatterns(res.m1),source:res.source};
+      if (state.selected===sym){ renderDetail(sym); renderFeed(); }
+    }).catch(function(){
+      state.cache[sym]={error:true};
+      if (state.selected===sym) renderDetail(sym);
+    });
+  }
+  loadOrderBook(sym);
+}
 
-      function fmtHourWIB(ms){
-        try{
-          var parts=new Intl.DateTimeFormat("id-ID",{timeZone:"Asia/Jakarta",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date(ms));
-          var m={}; parts.forEach(function(p){ m[p.type]=p.value; });
-          return m.day+" "+m.month+" · "+m.hour+":"+m.minute+" WIB";
-        }catch(e){
-          return tlabel(ms);
-        }
-      }
+/* ================= MAIN REFRESH ================= */
+function refreshAll(){
+  if (state.loading) return;
+  state.loading=true; $("refreshBtn").disabled=true; $("refreshBtn").textContent="Memuat…";
+  var jobs=[], okCount=0;
+  STRIP.forEach(function(sym){
+    jobs.push(fetchCandles(coinDef(sym)).then(function(res){
+      okCount++;
+      state.stripData[sym]={m1:res.m1,h1:res.h1,m:computeMetrics(res.m1,res.h1),patterns:detectPatterns(res.m1),source:res.source};
+    }).catch(function(){ if(!state.stripData[sym]) state.stripData[sym]={error:true}; else state.stripData[sym].stale=true; }));
+  });
+  var selSym=state.selected;
+  jobs.push(fetchCandles(coinDef(selSym)).then(function(res){
+    okCount++;
+    state.cache[selSym]={m1:res.m1,h1:res.h1,m:computeMetrics(res.m1,res.h1),patterns:detectPatterns(res.m1),source:res.source};
+  }).catch(function(){ if(!state.cache[selSym]) state.cache[selSym]={error:true}; }));
+  Promise.all(jobs).then(function(){
+    state.attempted=true;
+    if (okCount>0){ state.anySuccess=true; state.lastOk=new Date(); $("lastUpdated").textContent=wibTime(state.lastOk); }
+    else { $("lastUpdated").textContent="— (belum ada data berhasil dimuat; percobaan terakhir "+wibTime(new Date())+")"; }
+    updateBadges();
+    var rec=state.cache[selSym];
+    $("activeSource").textContent=rec&&rec.source?rec.source:"—";
+    var anyStale=STRIP.some(function(s){return state.stripData[s]&&state.stripData[s].stale;});
+    $("staleFlag").innerHTML=anyStale?'<span class="badge stale">SEBAGIAN DATA BASI</span> — refresh terakhir gagal untuk sebagian koin, angka lama dipertahankan & dilabeli':"";
+    renderStrip(); renderDetail(selSym); renderHemisphere(); loadOrderBook(selSym); renderFeed();
+    state.loading=false; $("refreshBtn").disabled=false; $("refreshBtn").textContent="Perbarui sekarang";
+    state.timer=60;
+  });
+}
 
-      // ---------- deteksi pola candlestick klasik dari candle 1 jam ----------
-      // Definisi standar: perbandingan badan candle, ekor (shadow) atas/bawah,
-      // dan konteks tren dari EMA20 candle 1 jam. Memindai 15 candle terakhir
-      // dari yang paling baru; mengembalikan pola pertama yang memenuhi definisi,
-      // atau null bila tidak ada — tidak ada pola yang dipaksakan.
-      function detectPattern(hc){
-        var n=hc.length;
-        if(n<25) return null;
-        var closes=hc.map(function(c){ return c[4]; });
-        var k=2/21, ema=[closes[0]], ei;
-        for(ei=1;ei<n;ei++) ema.push(closes[ei]*k+ema[ei-1]*(1-k));
-        function trendAt(i){
-          if(i<4) return 0;
-          if(closes[i]<ema[i] && ema[i]<ema[i-3]) return -1;
-          if(closes[i]>ema[i] && ema[i]>ema[i-3]) return 1;
-          return 0;
-        }
-        function parts(c){
-          var o=c[1], h=c[2], l=c[3], cl=c[4];
-          return {o:o, h:h, l:l, c:cl, body:Math.abs(cl-o), range:h-l,
-            up:h-Math.max(o,cl), dn:Math.min(o,cl)-l, bull:cl>o, bear:cl<o};
-        }
-        function mk(name, bias, cls, desc, i){
-          var c=hc[i];
-          return {name:name, bias:bias, cls:cls, desc:desc, openTime:c[0],
-            high:c[2], low:c[3], idx:i, total:n, forming:(i===n-1)};
-        }
-        function check3(i){
-          var a=parts(hc[i-2]), b=parts(hc[i-1]), c=parts(hc[i]), tr=trendAt(i-2);
-          if(tr===-1 && a.bear && a.range>0 && a.body>=0.5*a.range && b.body<=0.35*a.body
-            && Math.max(b.o,b.c)<=a.c+a.body*0.35 && c.bull && c.c>(a.o+a.c)/2)
-            return mk("Morning Star","Bullish","long","Tiga candle: candle turun besar, candle berbadan kecil di bawahnya (penjual mulai ragu), lalu candle naik yang menutup di atas titik tengah candle pertama — pola pembalikan naik klasik di dasar tren turun.",i);
-          if(tr===1 && a.bull && a.range>0 && a.body>=0.5*a.range && b.body<=0.35*a.body
-            && Math.min(b.o,b.c)>=a.c-a.body*0.35 && c.bear && c.c<(a.o+a.c)/2)
-            return mk("Evening Star","Bearish","short","Kebalikan Morning Star: candle naik besar, candle berbadan kecil di puncak, lalu candle turun yang menutup di bawah titik tengah candle pertama — pola pembalikan turun klasik.",i);
-          if(a.bull && b.bull && c.bull && a.body>0 && b.body>0 && c.body>0
-            && b.c>a.c && c.c>b.c && b.o>a.o && b.o<a.c && c.o>b.o && c.o<b.c
-            && a.up<=a.body && b.up<=b.body && c.up<=c.body)
-            return mk("Three White Soldiers","Bullish","long","Tiga candle naik berurutan: masing-masing membuka di dalam badan candle sebelumnya, menutup lebih tinggi, dan berekor atas pendek — tekanan beli yang konsisten tiga jam berturut-turut.",i);
-          if(a.bear && b.bear && c.bear && a.body>0 && b.body>0 && c.body>0
-            && b.c<a.c && c.c<b.c && b.o<a.o && b.o>a.c && c.o<b.o && c.o>b.c
-            && a.dn<=a.body && b.dn<=b.body && c.dn<=c.body)
-            return mk("Three Black Crows","Bearish","short","Tiga candle turun berurutan: masing-masing membuka di dalam badan candle sebelumnya, menutup lebih rendah, dan berekor bawah pendek — tekanan jual yang konsisten tiga jam berturut-turut.",i);
-          return null;
-        }
-        function check2(i){
-          var a=parts(hc[i-1]), b=parts(hc[i]), tr=trendAt(i-1);
-          if(a.bear && b.bull && b.body>a.body && b.o<=a.c && b.c>=a.o)
-            return mk("Bullish Engulfing","Bullish","long","Badan candle naik menelan seluruh badan candle turun sebelumnya — dalam satu jam, pembeli mengambil alih penuh dari penjual.",i);
-          if(a.bull && b.bear && b.body>a.body && b.o>=a.c && b.c<=a.o)
-            return mk("Bearish Engulfing","Bearish","short","Badan candle turun menelan seluruh badan candle naik sebelumnya — dalam satu jam, penjual mengambil alih penuh dari pembeli.",i);
-          if(tr===-1 && a.bear && a.range>0 && a.body>=0.5*a.range && b.bull
-            && b.o<a.c && b.c>(a.o+a.c)/2 && b.c<a.o)
-            return mk("Piercing Line","Bullish","long","Setelah candle turun besar, candle berikutnya membuka lebih rendah lalu menutup di atas titik tengah badan candle turun itu (belum melewati harga bukanya) — penolakan awal terhadap penurunan lebih lanjut.",i);
-          if(tr===1 && a.bull && a.range>0 && a.body>=0.5*a.range && b.bear
-            && b.o>a.c && b.c<(a.o+a.c)/2 && b.c>a.o)
-            return mk("Dark Cloud Cover","Bearish","short","Setelah candle naik besar, candle berikutnya membuka lebih tinggi lalu menutup di bawah titik tengah badan candle naik itu — awan gelap menutupi tren naik, tanda dorongan naik mulai ditolak.",i);
-          if(tr===-1 && a.bear && b.bull && b.body<a.body && b.o>=a.c && b.c<=a.o)
-            return mk("Harami Bullish","Bullish","long","Candle naik kecil yang seluruh badannya berada di dalam badan candle turun besar sebelumnya — momentum turun melemah; potensi jeda atau pembalikan naik, menunggu konfirmasi.",i);
-          if(tr===1 && a.bull && b.bear && b.body<a.body && b.o<=a.c && b.c>=a.o)
-            return mk("Harami Bearish","Bearish","short","Candle turun kecil yang seluruh badannya berada di dalam badan candle naik besar sebelumnya — momentum naik melemah; potensi jeda atau pembalikan turun, menunggu konfirmasi.",i);
-          return null;
-        }
-        function check1(i){
-          var a=parts(hc[i]);
-          if(a.range<=0) return null;
-          var tr=trendAt(i);
-          if(a.body<=0.1*a.range){
-            if(a.dn>=0.6*a.range && a.up<=0.15*a.range)
-              return mk("Dragonfly Doji","Bullish","long","Doji berekor bawah sangat panjang dan hampir tanpa ekor atas: harga sempat ditekan jauh ke bawah lalu ditarik kembali ke harga buka — penolakan kuat terhadap harga rendah.",i);
-            if(a.up>=0.6*a.range && a.dn<=0.15*a.range)
-              return mk("Gravestone Doji","Bearish","short","Doji berekor atas sangat panjang dan hampir tanpa ekor bawah: harga sempat didorong jauh ke atas lalu jatuh kembali ke harga buka — penolakan kuat terhadap harga tinggi.",i);
-            return mk("Doji","Netral","flat","Harga buka dan tutup hampir sama persis — tarik-menang pembeli dan penjual seimbang dalam satu jam. Sendirian bukan sinyal arah; ia menandakan keraguan, dan candle berikutnya yang menentukan kelanjutannya.",i);
-          }
-          if(a.body>0 && a.dn>=2*a.body && a.dn>=0.6*a.range && a.up<=0.2*a.range){
-            if(tr===-1) return mk("Hammer","Bullish","long","Badan kecil di bagian atas dengan ekor bawah minimal dua kali panjang badan, muncul setelah tren turun — penjual mendorong harga jauh ke bawah tetapi pembeli menariknya kembali sebelum candle ditutup.",i);
-            if(tr===1) return mk("Hanging Man","Bearish","short","Bentuknya sama persis seperti Hammer, tetapi muncul setelah tren naik: ekor bawah panjang di puncak menandakan tekanan jual mulai muncul dan diserap — butuh konfirmasi candle turun berikutnya.",i);
-          }
-          if(a.body>0 && a.up>=2*a.body && a.up>=0.6*a.range && a.dn<=0.2*a.range){
-            if(tr===-1) return mk("Inverted Hammer","Bullish","long","Badan kecil di bagian bawah dengan ekor atas minimal dua kali panjang badan, muncul setelah tren turun — pembeli sempat mendorong harga naik jauh; potensi pembalikan naik yang masih butuh konfirmasi.",i);
-            if(tr===1) return mk("Shooting Star","Bearish","short","Badan kecil di bagian bawah dengan ekor atas minimal dua kali panjang badan, muncul setelah tren naik — dorongan naik ditolak dan harga jatuh kembali ke dekat harga buka; sinyal pelemahan klasik di puncak.",i);
-          }
-          return null;
-        }
-        for(var i=n-1;i>=Math.max(2,n-15);i--){
-          var r=check3(i)||check2(i)||check1(i);
-          if(r) return r;
-        }
-        return null;
-      }
-
-      function patternAge(p){
-        var diff=p.total-1-p.idx, t=fmtHourWIB(p.openTime);
-        if(p.forming || diff===0) return "Candle 1 jam yang sedang berjalan · mulai "+t+" — belum ditutup, polanya masih bisa berubah";
-        if(diff===1) return "Candle 1 jam terakhir yang sudah ditutup · "+t;
-        return diff+" candle 1 jam lalu · "+t;
-      }
-
-      function patternHTML(d){
-        var head='<h2>Pola Candlestick <span class="info">· candle 1 jam · definisi standar</span></h2>';
-        if(d.patternNA){
-          return '<section class="card">'+head+
-            '<p class="bias-note" style="margin:0">Data candle 1 jam tidak terjangkau saat pengambilan terakhir, jadi pola tidak bisa dibaca kali ini. Panel lain tetap memakai data 1-menit yang berhasil dimuat, dan pola dicoba lagi pada pembaruan berikutnya.</p></section>';
-        }
-        var p=d.pattern;
-        if(!p){
-          return '<section class="card">'+head+
-            '<div class="pat-row"><span class="pat-name">Tidak ada pola</span><span class="chip flat">Netral</span></div>'+
-            '<p class="bias-note">Tidak ada pola candlestick klasik yang memenuhi definisi standar pada 15 candle 1 jam terakhir — halaman ini tidak memaksakan pola yang memang tidak terbentuk. Begitu ada candle yang memenuhi definisi, polanya tampil di sini dan ditandai di grafik Forecast Range.</p></section>';
-        }
-        var colTxt=p.cls==="long"?"hijau":(p.cls==="short"?"merah":"kuning");
-        return '<section class="card">'+head+
-          '<div class="pat-row"><span class="pat-name">'+p.name+'</span><span class="chip '+p.cls+'">'+p.bias+'</span></div>'+
-          '<div class="pat-age">'+patternAge(p)+'</div>'+
-          '<p class="pat-desc">'+p.desc+'</p>'+
-          '<p class="bias-note" style="margin:8px 0 0">Candle berpola ini ditandai berlian '+colTxt+' bertuliskan namanya pada grafik Forecast Range di bawah. Pola adalah konteks bacaan, bukan sinyal pasti — padukan dengan Bias Momentum dan level support/resistance sebelum mengambil keputusan.</p></section>';
-      }
-
-      function computeData(sym, raw, sourceLabel){
-        var m=META[sym];
-        var all=raw.map(function(r){ return [r[0], parseFloat(r[1]), parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4]), parseFloat(r[7])]; });
-        var closes=all.map(function(c){ return c[4]; });
-        var last60=all.slice(-60), last360=all.slice(-360);
-        var closes60=last60.map(function(c){ return c[4]; });
-        var last=closes[closes.length-1];
-        var start=last60[0][1];
-        var chg1h=(last/start-1)*100;
-        var supNear=Math.min.apply(null, last60.map(function(c){ return c[3]; }));
-        var resNear=Math.max.apply(null, last60.map(function(c){ return c[2]; }));
-        var supStrong=Math.min.apply(null, last360.map(function(c){ return c[3]; }));
-        var resStrong=Math.max.apply(null, last360.map(function(c){ return c[2]; }));
-        var volQuote=0; last60.forEach(function(c){ volQuote+=c[5]; });
-        var green=0; last60.forEach(function(c){ if(c[4]>=c[1]) green++; });
-        var greenPct=green/last60.length*100;
-        // volatilitas terealisasi 1 jam: stdev sampel return 1-menit x sqrt(60)
-        var rets=[], i, mean=0;
-        for(i=1;i<closes60.length;i++){ var r=closes60[i]/closes60[i-1]-1; rets.push(r); mean+=r; }
-        mean/=rets.length;
-        var ss=0; rets.forEach(function(r){ ss+=(r-mean)*(r-mean); });
-        var volFrac=Math.sqrt(ss/(rets.length-1))*Math.sqrt(60);
-        var vol1h=volFrac*100;
-        var fHigh=last*(1+volFrac), fLow=last*(1-volFrac);
-        var rsi=rsiWilder(closes,14);
-        var ema20=emaLast(closes,20), ema50=emaLast(closes,50);
-        var atr=atrWilder(all,14);
-        // skor Bias Momentum 0-100: RSI + % candle hijau + perubahan 1 jam + posisi EMA
-        var rawScore=-6 + 0.6*rsi + 0.15*greenPct + 5*chg1h
-          + (last>ema20?13:0) + (last>ema50?15:0) + (ema20>ema50?11:0);
-        var longPct=Math.max(1, Math.min(99, Math.round(rawScore)));
-        var isLong=longPct>=50;
-        var d={
-          name:m.name, pair:m.pair, dec:m.dec, note:m.note||null, source:sourceLabel||"Binance",
-          last:last, start:start, chg1h:chg1h, volQuote:fmtVolID(volQuote),
-          longPct:longPct, biasLabel:isLong?"Condong Long":"Condong Short", biasClass:isLong?"long":"short",
-          fHigh:fHigh, fLow:fLow, vol1h:vol1h,
-          supStrong:supStrong, resStrong:resStrong, supNear:supNear, resNear:resNear,
-          rsi:rsi, ema20:ema20, ema50:ema50, atr:atr, greenPct:greenPct,
-          candles:last60.map(function(c){ return [c[0],c[1],c[2],c[3],c[4]]; })
-        };
-        d.verdict=buildVerdict(m, d, isLong);
-        d.drivers=buildDrivers(m, d);
-        return d;
-      }
-
-      function buildVerdict(m, d, isLong){
-        var move=Math.abs(d.chg1h)<=0.05 ? "praktis flat" : (d.chg1h>0 ? "naik" : "turun");
-        var a20=d.last>=d.ema20, a50=d.last>=d.ema50, emaTxt;
-        if(a20===a50){
-          emaTxt="harga di "+(a20?"atas":"bawah")+" EMA20 "+fmt(d.ema20,d.dec)+" serta di "+(a20?"atas":"bawah")+" EMA50 "+fmt(d.ema50,d.dec);
-        } else if(a20){
-          emaTxt="harga di atas EMA20 "+fmt(d.ema20,d.dec)+" tetapi masih di bawah EMA50 "+fmt(d.ema50,d.dec);
-        } else {
-          emaTxt="harga di bawah EMA20 "+fmt(d.ema20,d.dec)+" tetapi masih di atas EMA50 "+fmt(d.ema50,d.dec);
-        }
-        var head=m.name+" "+move+" <b>"+pct(d.chg1h)+"</b> dalam 1 jam terakhir ke "+fmt(d.last,d.dec)
-          +", dengan RSI(1m) "+d.rsi.toFixed(1)+" dan "+emaTxt+". ";
-        if(isLong){
-          return head+"Bias <b>condong Long</b> selama harga bertahan di atas EMA20 — tembus resistance 1 jam <b>"
-            +fmt(d.resNear,d.dec)+"</b> membuka ruang ke resistance 6 jam "+fmt(d.resStrong,d.dec)
-            +"; sebaliknya close di bawah "+fmt(d.fLow,d.dec)+" (batas bawah forecast) melemahkan bias ini.";
-        }
-        return head+"Bias <b>condong Short</b> selama harga belum merebut kembali EMA20 — jebol support 1 jam <b>"
-          +fmt(d.supNear,d.dec)+"</b> membuka uji support 6 jam "+fmt(d.supStrong,d.dec)
-          +"; sebaliknya close di atas "+fmt(d.fHigh,d.dec)+" (batas atas forecast) membatalkan bias turun ini.";
-      }
-
-      function buildDrivers(m, d){
-        var dLow=(d.last-d.supNear)/d.supNear*100;
-        var dHigh=(d.resNear-d.last)/d.last*100;
-        var srcA="Dari candle 1-menit "+(d.source||"Binance")+" (data live).";
-        var srcB="Dihitung dari candle 1-menit "+(d.source||"Binance")+" (data live).";
-        return [
-          {tag:"Top 1", text:"Pergerakan 1 jam: harga terakhir "+fmt(d.last,d.dec)+" berjarak "+pct(dLow)+" dari low 1 jam "
-            +fmt(d.supNear,d.dec)+" dan "+pct(dHigh)+" dari high 1 jam "+fmt(d.resNear,d.dec)
-            +" — level terdekat yang ditembus lebih dulu cenderung menentukan arah jam berikutnya.", src:srcA},
-          {tag:"Faktor 2", text:"RSI(1m) "+d.rsi.toFixed(1)+" dan "+Math.round(d.greenPct)+"% candle 1 menit terakhir berwarna hijau. Volatilitas terealisasi 1 jam "
-            +d.vol1h.toFixed(2)+"% — itulah yang menentukan lebar rentang forecast di panel ini.", src:srcB},
-          {tag:"Faktor 3", text:"Volume spot 1 jam ±"+d.volQuote+" di pair "+m.pairD+" "+(d.source||"Binance")+". Volume yang tipis membuat penembusan level lebih rawan jadi penembusan semu, jadi tetap tunggu konfirmasi candle berikutnya.", src:srcA}
-        ];
-      }
-
-function drawChart(d){
-        // Fan digambar seperti chart referensi: titik awal fan (Forecast Start) berada
-        // di tengah area candle — candle ke-30 dari 60 (30 menit lalu) — lalu melebar ke
-        // Possible High / Low di ujung horizon (titik awal + 1 jam). Candle setelah titik
-        // awal digambar DI DALAM area fan, dan garis putus-putus Last Price memanjang
-        // dari candle terakhir ke tepi kanan plot.
-        var W=720,H=336, x0=8, xEnd=556, plotW=xEnd-x0;
-        var oi=30; // indeks candle titik awal fan
-        var totalMin=d.candles.length + (d.candles.length-oi); // 60 candle + sisa horizon
-        var oPrice=d.candles[oi][4], oTime=d.candles[oi][0];
-        var allL=Math.min.apply(null, d.candles.map(function(c){return c[3];}).concat([d.fLow]));
-        var allH=Math.max.apply(null, d.candles.map(function(c){return c[2];}).concat([d.fHigh]));
-        var pad=(allH-allL)*0.07; allL-=pad; allH+=pad;
-        function Y(v){ return 12 + (allH-v)/(allH-allL)*(H-54); }
-        function X(i){ return x0 + (i+0.5)*(plotW/totalMin); }
-        var xO=X(oi), yO=Y(oPrice);
-        var xLast=X(d.candles.length-1);
-        var yL=Y(d.last), yH=Y(d.fHigh), yF=Y(d.fLow);
-        var fhO=(d.fHigh-oPrice)/oPrice*100, flO=(d.fLow-oPrice)/oPrice*100;
-        function pctS(v){ return (v>=0?"+":"")+v.toFixed(2)+"%"; }
-        var s="";
-        // grid horizontal (tanpa label harga di kanan — digantikan kotak High/Last/Low)
-        for(var g=0; g<=4; g++){
-          var gy=12+(H-54)*g/4;
-          s+='<line x1="'+x0+'" y1="'+gy+'" x2="'+xEnd+'" y2="'+gy+'" stroke="#232329" stroke-width="1"/>';
-        }
-        // fan areas: dari titik awal di tengah candle, melebar ke ujung horizon
-        s+='<polygon points="'+xO+','+yO+' '+xEnd+','+yH+' '+xEnd+','+yL+'" fill="rgba(30,201,139,.15)"/>';
-        s+='<polygon points="'+xO+','+yO+' '+xEnd+','+yL+' '+xEnd+','+yF+'" fill="rgba(246,70,93,.14)"/>';
-        s+='<line x1="'+xO+'" y1="'+yO+'" x2="'+xEnd+'" y2="'+yH+'" stroke="#1ec98b" stroke-width="1.4" stroke-dasharray="5 4"/>';
-        s+='<line x1="'+xO+'" y1="'+yO+'" x2="'+xEnd+'" y2="'+yF+'" stroke="#f6465d" stroke-width="1.4" stroke-dasharray="5 4"/>';
-        s+='<line x1="'+xO+'" y1="'+yO+'" x2="'+xEnd+'" y2="'+yL+'" stroke="#8f8f9a" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/>';
-        // garis vertikal putus-putus di titik awal fan
-        s+='<line x1="'+xO+'" y1="8" x2="'+xO+'" y2="'+(H-40)+'" stroke="#3a3a44" stroke-width="1" stroke-dasharray="3 4"/>';
-        // support level: garis teal melintasi seluruh plot + label pill di kiri
-        var yS=Y(d.supNear);
-        s+='<line x1="'+x0+'" y1="'+yS+'" x2="'+xEnd+'" y2="'+yS+'" stroke="#2bd9c7" stroke-width="1" stroke-dasharray="6 4" opacity=".7"/>';
-        var pillY=Math.max(16,Math.min(yS-9,H-58));
-        s+='<rect x="'+(x0+2)+'" y="'+pillY+'" width="86" height="17" rx="8.5" fill="#0d1f1b" stroke="#2bd9c7" stroke-width=".8"/>';
-        s+='<text x="'+(x0+10)+'" y="'+(pillY+12)+'" fill="#2bd9c7" font-size="9.5">Support Level</text>';
-        // candles — digambar di atas fan, jadi candle setelah titik awal tampak di dalam fan
-        var bw=Math.max(3,(plotW/totalMin)*0.62);
-        d.candles.forEach(function(c,i){
-          var up=c[4]>=c[1], col=up?"#1ec98b":"#f6465d", cx=X(i);
-          s+='<line x1="'+cx+'" y1="'+Y(c[2])+'" x2="'+cx+'" y2="'+Y(c[3])+'" stroke="'+col+'" stroke-width="1.2"/>';
-          var yOp=Y(c[1]), yCl=Y(c[4]);
-          s+='<rect x="'+(cx-bw/2)+'" y="'+Math.min(yOp,yCl)+'" width="'+bw+'" height="'+Math.max(1.4,Math.abs(yCl-yOp))+'" fill="'+col+'"/>';
-        });
-        // penanda pola candlestick 1 jam: berlian berwarna + nama pola pada posisi
-        // waktu candle berpola, bila rentang jamnya beririsan dengan jendela grafik
-        if(d.pattern){
-          var pp=d.pattern, t0=d.candles[0][0], t1=d.candles[d.candles.length-1][0]+60000;
-          var os=Math.max(pp.openTime,t0), oe=Math.min(pp.openTime+3600000,t1);
-          if(oe>os){
-            var midT=(os+oe)/2;
-            var mx=x0+(((midT-t0)/60000)+0.5)*(plotW/totalMin);
-            var pCol=pp.cls==="long"?"#1ec98b":(pp.cls==="short"?"#f6465d":"#f5b90d");
-            var above=pp.cls!=="long";
-            var my=above?Y(pp.high)-13:Y(pp.low)+13;
-            my=Math.max(14,Math.min(H-56,my));
-            s+='<g><title>Pola candlestick 1 jam: '+pp.name+' ('+pp.bias+')</title>'
-              +'<rect x="'+(mx-5.5)+'" y="'+(my-5.5)+'" width="11" height="11" transform="rotate(45 '+mx+' '+my+')" fill="'+pCol+'" stroke="#0a0a0c" stroke-width="1.4"/></g>';
-            var anch=mx>xEnd-95?"end":(mx<x0+95?"start":"middle");
-            var lx=anch==="middle"?mx:(anch==="end"?mx+9:mx-9);
-            s+='<text x="'+lx+'" y="'+(above?my-11:my+17)+'" fill="'+pCol+'" font-size="10" font-weight="700" text-anchor="'+anch+'">'+pp.name+'</text>';
-          }
-        }
-        // garis Last Price: putus-putus putih dari candle terakhir ke tepi kanan
-        s+='<line x1="'+xLast+'" y1="'+yL+'" x2="'+xEnd+'" y2="'+yL+'" stroke="#e8e8ec" stroke-width="1.2" stroke-dasharray="5 4"/>';
-        // titik-titik ujung
-        s+='<circle cx="'+xO+'" cy="'+yO+'" r="4.5" fill="#0a0a0c" stroke="#f2f2f4" stroke-width="2"/>';
-        s+='<circle cx="'+xEnd+'" cy="'+yH+'" r="4" fill="#0a0a0c" stroke="#1ec98b" stroke-width="2"/>';
-        s+='<circle cx="'+xEnd+'" cy="'+yF+'" r="4" fill="#0a0a0c" stroke="#f6465d" stroke-width="2"/>';
-        s+='<circle cx="'+xEnd+'" cy="'+yL+'" r="4" fill="#0a0a0c" stroke="#f2f2f4" stroke-width="2"/>';
-        // kotak label di kanan plot: High / Last Price / Low
-        var boxX=xEnd+10, boxW=146, boxH=42;
-        function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
-        var hCy=clamp(yH,boxH/2+4,H-44-boxH/2), lCy=clamp(yF,boxH/2+4,H-44-boxH/2);
-        var mCy=clamp(yL,hCy+boxH+4,lCy-boxH-4);
-        function labelBox(cy,stroke,title,val,pctTxt){
-          var by=cy-boxH/2;
-          var out='<rect x="'+boxX+'" y="'+by+'" width="'+boxW+'" height="'+boxH+'" rx="7" fill="#17171b" stroke="'+stroke+'" stroke-width="1"/>';
-          out+='<text x="'+(boxX+9)+'" y="'+(by+14)+'" fill="#9a9aa5" font-size="9.5">'+title+'</text>';
-          out+='<text x="'+(boxX+9)+'" y="'+(by+29)+'" fill="#f2f2f4" font-size="12.5" font-weight="700">'+val+'</text>';
-          if(pctTxt) out+='<text x="'+(boxX+boxW-9)+'" y="'+(by+29)+'" fill="'+stroke+'" font-size="10.5" font-weight="700" text-anchor="end">'+pctTxt+'</text>';
-          return out;
-        }
-        s+=labelBox(hCy,"#1ec98b","High",fmt(d.fHigh,d.dec),pctS(fhO));
-        s+=labelBox(mCy,"#8f8f9a","Last Price",fmt(d.last,d.dec),null);
-        s+=labelBox(lCy,"#f6465d","Low",fmt(d.fLow,d.dec),pctS(flO));
-        // penanda waktu saat ini, seperti pill "Current time" di referensi
-        var nowLbl=tlabel(d.candles[d.candles.length-1][0]);
-        var pCx=clamp(xLast,86,xEnd-86), pY=H-64;
-        s+='<rect x="'+(pCx-84)+'" y="'+pY+'" width="168" height="17" rx="8.5" fill="#1f1f24" stroke="#2a2a31" stroke-width=".8"/>';
-        s+='<text x="'+pCx+'" y="'+(pY+12)+'" fill="#9a9aa5" font-size="9.5" text-anchor="middle">Current time · <tspan fill="#f5b90d">'+nowLbl+'</tspan></text>';
-        // label sumbu waktu
-        s+='<text x="'+x0+'" y="'+(H-22)+'" fill="#6d6d78" font-size="10.5">'+tlabel(d.candles[0][0])+'</text>';
-        s+='<text x="'+xO+'" y="'+(H-22)+'" fill="#6d6d78" font-size="10.5" text-anchor="middle">'+tlabel(oTime)+'</text>';
-        s+='<text x="'+xEnd+'" y="'+(H-22)+'" fill="#6d6d78" font-size="10.5" text-anchor="end">'+tlabel(oTime+3600000)+'</text>';
-        s+='<text x="'+((x0+xO)/2)+'" y="'+(H-5)+'" fill="#6d6d78" font-size="10" text-anchor="middle">← Occurred →</text>';
-        s+='<text x="'+((xO+xEnd)/2)+'" y="'+(H-5)+'" fill="#6d6d78" font-size="10" text-anchor="middle">← - - Next 1h (Forecast) - - →</text>';
-        var ariaPat=d.pattern?'; pola candlestick 1 jam terbaru: '+d.pattern.name+' ('+d.pattern.bias+'), ditandai berlian berwarna bila jamnya masuk jendela grafik':'';
-        return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Grafik candle 1 menit dan rentang forecast '+d.name+': fan mulai dari candle 30 menit lalu dan melebar ke Possible High dan Possible Low, candle setelah titik awal berjalan di dalam fan'+ariaPat+'">'+s+'</svg>';
-      }
-
-function panelHTML(sym){
-        var d=DATA[sym], shortPct=100-d.longPct;
-        var oPrice=d.candles[30][4]; // titik awal fan di grafik (candle 30 menit lalu)
-        var fhPct=(d.fHigh-oPrice)/oPrice*100, flPct=(d.fLow-oPrice)/oPrice*100;
-        var drivers=d.drivers.map(function(dr,i){
-          return '<div class="driver'+(i>0?" plain":"")+'"><div class="tag">'+dr.tag+'</div><p>'+dr.text+'</p><div class="src">'+dr.src+'</div></div>';
-        }).join("");
-        return ''+
-        (d.note?'<div class="notebox">'+d.note+'</div>':'')+
-        '<section class="card">'+
-          '<div class="bias-head"><span class="up">Long '+d.longPct.toFixed(1)+'%</span><span class="down">Short '+shortPct.toFixed(1)+'%</span></div>'+
-          '<div class="bias-bar"><div class="fill" style="width:'+d.longPct+'%"></div></div>'+
-          '<p class="bias-note">Bar <b style="color:var(--txt)">Bias Momentum</b> (RSI + EMA + arah candle 1-menit + perubahan harga 1 jam, data spot) — bukan rasio posisi futures. Baca cara hitungnya di bagian bawah halaman.</p>'+
-          '<div class="verdict"><b>Kesimpulan arah — '+d.biasLabel+':</b> '+d.verdict+'</div>'+
-        '</section>'+
-        patternHTML(d)+
-        '<section class="card">'+
-          '<h2>Forecast Range <span class="info">· 1 jam ke depan</span></h2>'+
-          '<div class="forecast-box"><div><div class="lbl">Forecast Start &amp; Price · titik awal fan (30 menit lalu)</div><div class="big">'+fmt(oPrice,d.dec)+'</div><div class="lbl">Harga terakhir: '+fmt(d.last,d.dec)+' · 1 jam lalu: '+fmt(d.start,d.dec)+'</div></div>'+
-          '<div class="side"><div class="up">↗ Possible High&nbsp; '+fmt(d.fHigh,d.dec)+' ('+fhPct.toFixed(2)+'%)</div>'+
-          '<div class="down">↘ Possible Low&nbsp; '+fmt(d.fLow,d.dec)+' ('+flPct.toFixed(2)+'%)</div></div></div>'+
-          drawChart(d)+
-          '<div class="legend"><span class="lg-c">Candles = Harga Aktual (1 menit)</span><span class="lg-f">Fan Area = Rentang Kemungkinan</span><span class="lg-p">Berlian = Candle Berpola (1 jam)</span></div>'+
-        '</section>'+
-        '<div class="sr" style="margin-bottom:12px">'+
-          '<div class="cell"><div class="lbl">Support kuat ⓘ low 6 jam terakhir</div><div class="val g">'+fmt(d.supStrong,d.dec)+'</div><div class="dist">'+dist(d.last,d.supStrong)+'</div></div>'+
-          '<div class="cell"><div class="lbl">Resistance kuat ⓘ high 6 jam terakhir</div><div class="val r">'+fmt(d.resStrong,d.dec)+'</div><div class="dist">'+dist(d.last,d.resStrong)+'</div></div>'+
-        '</div>'+
-        '<section class="card"><h2>Angka pendukung</h2><div class="stats">'+
-          '<div class="stat"><div class="k">Harga terakhir</div><div class="v">'+fmt(d.last,d.dec)+'</div></div>'+
-          '<div class="stat"><div class="k">Perubahan 1 jam</div><div class="v '+(d.chg1h>=0?"up":"down")+'">'+pct(d.chg1h)+'</div></div>'+
-          '<div class="stat"><div class="k">Volume spot 1 jam</div><div class="v">'+d.volQuote+'</div></div>'+
-          '<div class="stat"><div class="k">Support terdekat (low 1j)</div><div class="v up">'+fmt(d.supNear,d.dec)+'</div></div>'+
-          '<div class="stat"><div class="k">Resistance terdekat (high 1j)</div><div class="v down">'+fmt(d.resNear,d.dec)+'</div></div>'+
-          '<div class="stat"><div class="k">RSI(14) · 1-menit</div><div class="v">'+d.rsi.toFixed(1)+'</div></div>'+
-          '<div class="stat"><div class="k">EMA20 / EMA50 · 1-menit</div><div class="v" style="font-size:.85rem">'+fmt(d.ema20,d.dec)+' / '+fmt(d.ema50,d.dec)+'</div></div>'+
-          '<div class="stat"><div class="k">ATR(14) · 1-menit</div><div class="v">'+fmt(d.atr,d.dec)+'</div></div>'+
-          '<div class="stat"><div class="k">Volatilitas 1 jam</div><div class="v">'+d.vol1h.toFixed(2)+'%</div></div>'+
-        '</div></section>'+
-        '<section class="card drivers"><h2>Key Drivers</h2>'+drivers+'</section>';
-      }
-      // ---------- ambil data + render ----------
-      var selEl=document.getElementById("coinSelect");
-      var summaryEl=document.getElementById("coinSummary");
-      var panelsEl=document.getElementById("panels");
-      var statusDot=document.getElementById("statusDot");
-      var statusText=document.getElementById("statusText");
-      var refreshInfo=document.getElementById("refreshInfo");
-      var refreshBtn=document.getElementById("refreshBtn");
-      var selected=ORDER[0];
-
-      ORDER.forEach(function(sym,idx){
-        var o=document.createElement("option");
-        o.value=sym;
-        o.textContent=sym+" — "+META[sym].name+" ("+META[sym].pair+")";
-        selEl.appendChild(o);
-        var p=document.createElement("div");
-        p.className="panel"+(idx===0?" active":""); p.id="panel-"+sym;
-        panelsEl.appendChild(p);
-        renderPanel(sym);
-      });
-      selEl.addEventListener("change",function(){ select(selEl.value); });
-      refreshBtn.addEventListener("click",function(){ nextAt=Date.now(); refreshAll(); });
-      panelsEl.addEventListener("click",function(ev){
-        var b=ev.target.closest?ev.target.closest("[data-retry]"):null;
-        if(b) refreshOne(b.getAttribute("data-retry"));
-      });
-
-      function select(sym){
-        selected=sym;
-        selEl.value=sym;
-        var d=DATA[sym];
-        if(d){
-          summaryEl.innerHTML='<span class="price">'+fmt(d.last,d.dec)+'</span>'+
-            '<span class="chg '+(d.chg1h>=0?"up":"down")+'">'+pct(d.chg1h)+' · 1j</span>'+
-            '<span class="chip '+d.biasClass+'">'+d.biasLabel+'</span>'+
-            '<span class="pair">'+d.pair+'</span>'+
-            (d.source && d.source!=="Binance"?'<span class="pair">via '+d.source+'</span>':'')+
-            (STALE[sym]?'<span class="chip flat">Data lama — pembaruan gagal</span>':'');
-        } else if(FAILED[sym]){
-          summaryEl.innerHTML='<span class="pair">Data '+sym+' gagal dimuat dari semua sumber (Binance, Binance US, OKX, Gate.io) — panel di bawah memberi tombol coba lagi.</span>';
-        } else {
-          summaryEl.innerHTML='<span class="pair">Memuat data '+sym+'… mencoba Binance, lalu cadangan Binance US / OKX / Gate.io bila perlu.</span>';
-        }
-        ORDER.forEach(function(s){
-          var el=document.getElementById("panel-"+s);
-          if(el) el.classList.toggle("active", s===sym);
-        });
-      }
-
-      function renderPanel(sym){
-        var el=document.getElementById("panel-"+sym);
-        if(!el) return;
-        var d=DATA[sym];
-        if(d){
-          var staleHtml=STALE[sym]
-            ? '<div class="notebox"><b>Pembaruan terakhir koin ini gagal</b> — angka di bawah adalah data terakhir yang berhasil dimuat'
-              +(SYM_TIME[sym]?' ('+fmtWIB(SYM_TIME[sym])+')':'')
-              +', bukan data baru. Halaman tetap mencoba lagi otomatis tiap 60 detik.</div>'
-            : '';
-          el.innerHTML=staleHtml+panelHTML(sym);
-        } else if(FAILED[sym]){
-          el.innerHTML='<section class="card panel-msg"><h2>'+sym+' — '+META[sym].name+'</h2>'
-            +'<p>Gagal memuat data '+META[sym].pair+' dari semua sumber — Binance Spot, Binance US, OKX, dan Gate.io tidak ada yang terjangkau. Periksa koneksi internet kamu, lalu coba lagi — tidak ada angka lama yang ditampilkan untuk koin ini.</p>'
-            +'<button type="button" class="retry-btn" data-retry="'+sym+'">Coba lagi</button></section>';
-        } else {
-          el.innerHTML='<section class="card panel-msg"><p style="margin:0"><span class="dot pulse"></span>Memuat data '+sym+'… mencoba Binance Spot, lalu Binance US / OKX / Gate.io bila perlu.</p></section>';
-        }
-        if(sym===selected) select(sym);
-      }
-
-      function updateStatus(){
-        var okCount=ORDER.filter(function(s){ return !!DATA[s]; }).length;
-        var failCount=ORDER.filter(function(s){ return FAILED[s]; }).length;
-        // sumber cadangan yang benar-benar dipakai koin mana pun saat ini,
-        // diurutkan mengikuti urutan rantai (Binance US, OKX, Gate.io)
-        var fbLabels=[];
-        SOURCES.forEach(function(src){
-          if(src.label==="Binance") return;
-          var used=ORDER.some(function(s){ return !!DATA[s] && SYM_SOURCE[s]===src.label; });
-          if(used) fbLabels.push(src.label);
-        });
-        var fbNote=fbLabels.length
-          ? ' <b>Sebagian data via '+fbLabels.join(" / ")+'</b> karena Binance utama tidak terjangkau.'
-          : '';
-        statusDot.className="dot"+(inFlight?" pulse":"");
-        if(inFlight && okCount===0){
-          statusText.innerHTML='<b>Memuat data live…</b> mengambil candle 1-menit dan 1-jam terbaru dari Binance Spot untuk 18 koin (cadangan otomatis per koin: Binance US → OKX → Gate.io).';
-        } else if(okCount>0 && failCount===0){
-          statusDot.className="dot ok";
-          statusText.innerHTML='<b>Live — Terakhir diperbarui:</b> '+(lastUpdated?fmtWIB(lastUpdated):"—")+fbNote;
-        } else if(okCount>0 && failCount>0){
-          statusText.innerHTML='<b>Terakhir diperbarui:</b> '+(lastUpdated?fmtWIB(lastUpdated):"—")
-            +' — <b>'+failCount+' dari 18 koin gagal diperbarui</b>; panelnya ditandai jelas dan dicoba lagi pada siklus berikutnya.'+fbNote;
-        } else if(okCount===0 && failCount>0){
-          statusDot.className="dot err";
-          statusText.innerHTML='<b>Gagal memuat data dari semua sumber</b> — Binance, Binance US, OKX, dan Gate.io tidak ada yang terjangkau, jadi belum ada angka yang bisa ditampilkan. Periksa koneksi internet; halaman mencoba lagi otomatis tiap 60 detik.';
-        }
-        if(inFlight){
-          refreshInfo.textContent="Sedang memperbarui data…";
-        }
-      }
-
-      function fetchJSON(url){
-        var ctrl=("AbortController" in window)?new AbortController():null;
-        var timer=ctrl?setTimeout(function(){ ctrl.abort(); },15000):null;
-        function done(){ if(timer) clearTimeout(timer); }
-        return fetch(url, ctrl?{signal:ctrl.signal}:undefined)
-          .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
-          .then(function(j){ done(); return j; }, function(e){ done(); throw e; });
-      }
-
-      // ---------- rantai sumber data: per koin, dicoba berurutan sampai satu berhasil ----------
-      // Semua sumber dinormalisasi ke bentuk candle Binance yang sama persis:
-      // [openTime(ms), open, high, low, close, baseVol, closeTime, quoteVol, ...]
-      // supaya seluruh hitungan (RSI, EMA, ATR, volatilitas, forecast, S/R, pola
-      // candlestick) identik apa pun sumber yang berhasil memuat koin itu.
-      function pairParts(sym){
-        var bin=META[sym].bin;               // mis. BTCUSDT (XAU memakai PAXGUSDT)
-        var base=bin.slice(0, bin.length-4); // BTC
-        return {dash:base+"-USDT", under:base+"_USDT"};
-      }
-      function fetchBinanceStyle(baseUrl, sym, interval, limit){
-        return fetchJSON(baseUrl+"?symbol="+META[sym].bin+"&interval="+interval+"&limit="+limit)
-          .then(function(j){
-            if(!j || !j.length || !j[0] || typeof j[0][0]!=="number") throw new Error("respons tidak dikenal");
-            return j;
-          });
-      }
-      function fetchOKX(sym, bar, limit){
-        var inst=pairParts(sym).dash;
-        function one(extra){
-          return fetchJSON("https://www.okx.com/api/v5/market/candles?instId="+inst+"&bar="+bar+"&limit="+limit+(extra||""))
-            .then(function(j){
-              if(!j || j.code!=="0" || !j.data || !j.data.length) throw new Error("OKX kosong");
-              // OKX mengembalikan TERBARU dulu -> dibalik jadi terlama dulu,
-              // lalu dipetakan: [ts, open, high, low, close, vol, volCcyQuote(idx 7)]
-              return j.data.slice().reverse().map(function(r){
-                var ts=parseInt(r[0],10);
-                return [ts, r[1], r[2], r[3], r[4], r[5], ts+59999, r[7]];
-              });
-            });
-        }
-        if(bar!=="1m") return one("");
-        // Endpoint candles OKX membatasi 300 candle per panggilan walau limit=500
-        // diminta; ambil satu halaman lanjutan (parameter after = candle tertua
-        // sejauh ini) supaya OKX tetap bisa mencapai ambang 400 candle 1-menit.
-        return one("").then(function(first){
-          if(first.length>=400) return first;
-          var oldest=first[0][0];
-          return one("&after="+oldest).then(function(older){
-            var seen={}, merged=[];
-            older.concat(first).forEach(function(c){ if(!seen[c[0]]){ seen[c[0]]=1; merged.push(c); } });
-            merged.sort(function(a,b){ return a[0]-b[0]; });
-            return merged.slice(-500);
-          }).catch(function(){ return first; });
-        });
-      }
-      function fetchGate(sym, interval, limit){
-        var pair=pairParts(sym).under;
-        return fetchJSON("https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair="+pair+"&interval="+interval+"&limit="+limit)
-          .then(function(j){
-            if(!j || !j.length || !j[0] || j[0].length<6) throw new Error("Gate kosong");
-            // Gate: [ts(detik), quoteVol, close, high, low, open, baseVol, ...],
-            // urutan terlama dulu -> ts dikali 1000, dipetakan ke format Binance
-            return j.map(function(r){
-              var ts=parseInt(r[0],10)*1000;
-              return [ts, r[5], r[3], r[4], r[2], r[6], ts+59999, r[1]];
-            });
-          });
-      }
-      // missing = koin yang memang tidak diperdagangkan di sumber itu (dari brief):
-      // dilewati langsung supaya tidak membuang waktu menunggu error.
-      var SOURCES=[
-        {label:"Binance", missing:{},
-         m1:function(sym){ return fetchBinanceStyle(API, sym, "1m", 500); },
-         h1:function(sym){ return fetchBinanceStyle(API, sym, "1h", 120); }},
-        {label:"Binance US", missing:{XPL:1, PYTH:1, WCT:1, SOMI:1},
-         m1:function(sym){ return fetchBinanceStyle("https://api.binance.us/api/v3/klines", sym, "1m", 500); },
-         h1:function(sym){ return fetchBinanceStyle("https://api.binance.us/api/v3/klines", sym, "1h", 120); }},
-        {label:"OKX", missing:{SOMI:1},
-         m1:function(sym){ return fetchOKX(sym, "1m", 500); },
-         h1:function(sym){ return fetchOKX(sym, "1H", 120); }},
-        {label:"Gate.io", missing:{},
-         m1:function(sym){ return fetchGate(sym, "1m", 500); },
-         h1:function(sym){ return fetchGate(sym, "1h", 120); }}
-      ];
-      var SYM_SOURCE={};   // label sumber yang terakhir berhasil memuat koin ini
-
-      function fetchOne(sym){
-        function trySource(idx){
-          if(idx>=SOURCES.length) return Promise.reject(new Error("semua sumber gagal"));
-          var src=SOURCES[idx];
-          if(src.missing[sym]) return trySource(idx+1);
-          return src.m1(sym).then(function(j){
-            // ambang sama seperti sebelumnya: panel butuh minimal 400 candle
-            // 1-menit; sumber yang mengembalikan kurang dari itu dilewati
-            if(!j || j.length<400) throw new Error("data kurang");
-            // candle 1 jam diambil dari sumber yang sama; kegagalannya tidak
-            // menggagalkan panel, pola cukup ditandai tidak tersedia
-            return src.h1(sym).then(function(hj){
-              if(!hj || hj.length<30) return null;
-              return hj.map(function(r){ return [r[0], parseFloat(r[1]), parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4])]; });
-            }).catch(function(){ return null; }).then(function(hourly){
-              var d=computeData(sym, j, src.label);
-              if(hourly){ d.pattern=detectPattern(hourly); }
-              else { d.pattern=null; d.patternNA=true; }
-              DATA[sym]=d;
-              SYM_SOURCE[sym]=src.label;
-              FAILED[sym]=false; STALE[sym]=false; SYM_TIME[sym]=new Date();
-            });
-          }).catch(function(){
-            return trySource(idx+1);
-          });
-        }
-        return trySource(0)
-          .catch(function(){
-            FAILED[sym]=true; if(DATA[sym]) STALE[sym]=true;
-          })
-          .then(function(){
-            renderPanel(sym);
-          });
-      }
-
-      function refreshAll(){
-        if(inFlight) return Promise.resolve();
-        inFlight=true; updateStatus();
-        return Promise.all(ORDER.map(function(sym){ return fetchOne(sym); })).then(function(){
-          inFlight=false;
-          if(ORDER.some(function(s){ return !!DATA[s]; })) lastUpdated=new Date();
-          nextAt=Date.now()+REFRESH_MS;
-          updateStatus();
-        });
-      }
-      function refreshOne(sym){
-        if(inFlight) return;
-        inFlight=true; FAILED[sym]=false; renderPanel(sym); updateStatus();
-        fetchOne(sym).then(function(){
-          inFlight=false;
-          if(DATA[sym] && !FAILED[sym]) lastUpdated=new Date();
-          nextAt=Date.now()+REFRESH_MS;
-          updateStatus();
-        });
-      }
-
-      setInterval(function(){
-        if(inFlight){
-          refreshInfo.textContent="Sedang memperbarui data…";
-          return;
-        }
-        var s=Math.max(0, Math.round((nextAt-Date.now())/1000));
-        refreshInfo.textContent="Auto-refresh tiap 60 detik · berikutnya ±"+s+" detik";
-        if(Date.now()>=nextAt) refreshAll();
-      }, 1000);
-
-      select(ORDER[0]);
-      updateStatus();
-      refreshAll();
-    </script>
-  </body>
+/* ================= INIT ================= */
+(function init(){
+  var sel=$("coinSelect");
+  COINS.forEach(function(c){
+    var o=document.createElement("option"); o.value=c.s;
+    o.textContent=c.s+" — "+c.name+(c.s==="XAU"?" (= PAXGUSDT)":"");
+    sel.appendChild(o);
+  });
+  sel.value="BTC";
+  sel.addEventListener("change", function(){
+    state.selected=sel.value;
+    if (state.stripData[state.selected] && !state.stripData[state.selected].error) state.cache[state.selected]=state.stripData[state.selected];
+    if (state.cache[state.selected]){ renderDetail(state.selected); loadOrderBook(state.selected); renderFeed(); }
+    else loadDetailExtras(state.selected);
+    var rec=state.cache[state.selected];
+    $("activeSource").textContent=rec&&rec.source?rec.source:"—";
+  });
+  $("refreshBtn").addEventListener("click", refreshAll);
+  renderAgents({});
+  updateBadges();
+  refreshAll();
+  setInterval(function(){
+    state.timer--;
+    if (state.timer<=0){ refreshAll(); }
+    $("countdown").textContent=Math.max(0,state.timer);
+  },1000);
+})();
+</script>
+</body>
 </html>
